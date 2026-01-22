@@ -1,0 +1,77 @@
+<div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm mb-8" id="my-products">
+	<div class="flex items-center justify-between mb-6">
+		<div>
+			<h3 class="text-lg font-semibold text-dark-forest-green">My Products</h3>
+			<p class="text-sm text-light-gray">{{ isStaff ? 'You can manage products you own.' : 'Read-only view of your records.' }}</p>
+		</div>
+	</div>
+
+	{% if products is not empty %}
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+			{% for product in products %}
+				<div class="border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition">
+					<div class="flex items-start justify-between gap-3 mb-3">
+						<div class="flex-1">
+							<h4 class="text-dark-forest-green font-semibold">{{ product.name }}</h4>
+							<p class="text-xs text-light-gray">Owner: You</p>
+						</div>
+						{% set imagePath = product.getImagePath() %}
+						{% if imagePath %}
+							<img src="{{ imagePath starts with('http') ? imagePath : asset(imagePath) }}" alt="{{ product.name }}" class="w-16 h-16 rounded-lg object-cover"/>
+						{% endif %}
+					</div>
+					<p class="text-sm text-light-gray mb-4 line-clamp-2">{{ product.description }}</p>
+					
+					<div class="flex items-center gap-2 text-sm text-dark-forest-green mb-3">
+						<ion-icon name="cash-outline" class="text-bright-green"></ion-icon>
+						<span>₱{{ product.price }}</span>
+					</div>
+					{# 
+					<div class="flex items-center gap-3">
+						<a href="{{ path('app_product_show', {'id': product.id}) }}" class="flex-1 text-center px-4 py-2 bg-gray-100 text-dark-forest-green rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+							View
+						</a>
+						{% if is_granted('PRODUCT_EDIT', product) %}
+							<a href="{{ path('app_product_edit', {'id': product.id}) }}" class="flex-1 text-center px-4 py-2 bg-bright-green text-white rounded-lg text-sm font-medium hover:bg-green-600 transition">
+								Edit
+							</a>
+						{% else %}
+							<span class="flex-1 text-center px-4 py-2 bg-gray-50 text-light-gray rounded-lg text-sm font-medium border border-dashed border-gray-200">
+								Edit disabled
+							</span>
+						{% endif %}
+					</div>
+
+					{% if is_granted('PRODUCT_DELETE', product) %}
+						<form method="post" action="{{ path('app_product_delete', {'id': product.id}) }}" class="mt-3" onsubmit="return confirm('Delete your product?');">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ product.id) }}">
+							<button type="submit" class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition">
+								Delete (own record)
+							</button>
+						</form>
+					{% else %}
+						<div class="mt-3 w-full px-4 py-2 text-sm font-medium text-light-gray bg-gray-50 rounded-lg border border-dashed border-gray-200 text-center">
+							Delete disabled
+						</div>
+					{% endif %}
+					 #}
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<div class="text-center py-8">
+			<div class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+				<ion-icon name="leaf-outline" class="w-8 h-8 text-light-gray"></ion-icon>
+			</div>
+			<p class="text-dark-forest-green font-semibold">No owned products yet</p>
+			<p class="text-sm text-light-gray">
+				{% if isStaff %}
+					Create a product to start managing your own records.
+				{% else %}
+					Browse the catalog; creation requires staff access.
+				{% endif %}
+			</p>
+		</div>
+	{% endif %}
+</div>
+

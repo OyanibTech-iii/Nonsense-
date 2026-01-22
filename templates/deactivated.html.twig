@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Account Deactivated | Growfico{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+  <div class="max-w-xl w-full bg-white rounded-2xl shadow-md border border-gray-200 p-8 text-center">
+    <div class="mb-4">
+      <h1 class="text-2xl font-semibold text-dark-forest-green">We’re sorry — your account has been deactivated</h1>
+      <p class="text-sm text-gray-600 mt-2">It looks like your account is currently inactive. We understand this can be unexpected and we want to help.</p>
+    </div>
+
+    {% if isDeactivated is defined and isDeactivated %}
+      <div class="text-center mt-4 space-y-3">
+        <p class="text-sm text-gray-700">We know losing access can be frustrating.<br>If your access was turned off by mistake or you have questions about what happened, please reach out and we’ll work with you to get this resolved as quickly as possible.</p>
+
+        <p class="text-sm text-gray-700">Here are a few options:</p>
+        <ul class="list-disc list-inside text-sm text-gray-700 inline-block">
+          <li>If you believe this was an error, contact our support team and include your full name and the email address you used to sign up.</li>
+          <li>If you were an admin or staff member and need to transfer responsibilities, let us know and we’ll assist with next steps.</li>
+          <li>If you prefer, you can request account reactivation and we’ll review your request promptly.</li>
+        </ul>
+
+        <div class="mt-4 flex flex-col gap-3 justify-center items-center">
+          <a href="mailto:support@growfico.com" class="inline-block px-4 py-2 bg-bright-green text-white rounded-lg text-sm">Contact Support</a>
+          <a href="/" class="inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm">Return to homepage</a>
+        </div>
+      </div>
+    {% else %}
+      <p class="text-sm text-gray-500 mt-6">If you believe you reached this page in error, please contact support.</p>
+      <div class="mt-4">
+        <a href="mailto:support@growfico.com" class="inline-block px-4 py-2 bg-bright-green text-white rounded-lg text-sm">Contact Support</a>
+      </div>
+    {% endif %}
+
+    <p class="text-xs text-gray-400 mt-6">We appreciate your patience — our team is here to help.</p>
+  </div>
+</div>
+{% endblock %}

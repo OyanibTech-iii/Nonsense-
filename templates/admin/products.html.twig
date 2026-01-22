@@ -1,0 +1,364 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Admin Products | Growfico{% endblock %}
+
+{% block header_title %}
+<h2 class="text-xl font-semibold text-dark-forest-green">Product Management</h2>
+<p class="text-sm text-light-gray">Manage your product catalog and inventory</p>
+{% endblock %}
+
+{% block admin_content %}
+            <div class="max-w-7xl mx-auto">
+                <!-- Products Management Section -->
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm">
+                    <!-- Header with Actions -->
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div>
+                                <h3 class="text-lg font-semibold text-dark-forest-green">Products Management</h3>
+                                <p class="text-sm text-light-gray">Manage your product catalog and inventory</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <!-- Search -->
+                                <div class="relative">
+                                    <input type="text" id="product-search" placeholder="Search products..." 
+                                           class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-bright-green focus:border-transparent">
+                                    <ion-icon name="search-outline" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg"></ion-icon>
+                                </div>
+                                <!-- Add Product Button -->
+                                <a href="{{ path('app_admin_product_new') }}" 
+                                   class="inline-flex items-center px-4 py-2 bg-bright-green text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors duration-200">
+                                    <ion-icon name="add-outline" class="w-4 h-4 mr-2"></ion-icon>
+                                    Add Product
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body" class="bg-white divide-y divide-gray-200">
+                                {% for product in products %}
+                                    <tr class="hover:bg-gray-50 transition-colors duration-200 product-row" data-product-id="{{ product.id }}"
+                                        data-product-name="{{ product.name }}"
+                                        data-product-description="{{ product.description }}"
+                                        data-product-price="{{ product.price }}"
+                                        data-product-status="{{ product.isAvailable ? 'Available' : 'Out of Stock' }}"
+                                        {% set rowImagePath = product.getImagePath() %}
+                                        data-product-image="{{ rowImagePath ? asset(rowImagePath) : '' }}">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                <div class="w-10 h-10 bg-gradient-to-br from-bright-green/10 to-dark-forest-green/10 rounded-lg flex items-center justify-center flex-shrink-0 mr-3">
+                                                    {% set imagePath = product.getImagePath() %}
+                                                    {% if imagePath %}
+                                                        <img src="{{ asset(imagePath) }}" alt="{{ product.name }}" class="w-full h-full object-cover rounded-lg">
+                                                    {% else %}
+                                                        <ion-icon name="leaf-outline" class="w-5 h-5 text-bright-green"></ion-icon>
+                                                    {% endif %}
+                                                </div>
+                                                <div>
+                                                    <div class="text-sm font-medium text-dark-forest-green">{{ product.name }}</div>
+                                                    <div class="text-sm text-light-gray truncate max-w-xs">{{ product.description }}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-semibold text-dark-forest-green">₱{{ product.price }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            {% if product.isAvailable %}
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                    <ion-icon name="checkmark-circle" class="w-3 h-3 mr-1"></ion-icon>
+                                                    Available
+                                                </span>
+                                            {% else %}
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                    <ion-icon name="close-circle" class="w-3 h-3 mr-1"></ion-icon>
+                                                    Out of Stock
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <div class="flex items-center gap-2">
+                                                <button type="button" 
+                                                   class="text-bright-green hover:text-green-600 transition-colors duration-200 open-product-modal"
+                                                   title="View Product">
+                                                    <ion-icon name="eye-outline" class="w-4 h-4"></ion-icon>
+                                                </button>
+                                                <a href="{{ path('app_admin_product_edit', {'id': product.id}) }}" 
+                                                   class="text-blue-600 hover:text-blue-800 transition-colors duration-200">
+                                                    <ion-icon name="create-outline" class="w-4 h-4"></ion-icon>
+                                                </a>
+                                                <button type="button" class="text-red-600 hover:text-red-800 transition-colors duration-200 delete-product-btn" data-product-id="{{ product.id }}" data-csrf-token="{{ csrf_token('delete' ~ product.id) }}" title="Delete Product">
+                                                    <ion-icon name="trash-outline" class="w-4 h-4"></ion-icon>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-12 text-center">
+                                            <div class="flex flex-col items-center">
+                                                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                                                    <ion-icon name="leaf-outline" class="w-8 h-8 text-light-gray"></ion-icon>
+                                                </div>
+                                                <h4 class="text-sm font-semibold text-dark-forest-green mb-2">No products found</h4>
+                                                <p class="text-xs text-light-gray mb-4 max-w-sm">Start building your product catalog by adding your first product.</p>
+                                                <a href="{{ path('app_admin_product_new') }}" 
+                                                   class="inline-flex items-center px-4 py-2 bg-bright-green text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors duration-200">
+                                                    <ion-icon name="add-outline" class="w-4 h-4 mr-2"></ion-icon>
+                                                    Add Your First Product
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Product View Modal -->
+<div id="product-view-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+    <div class="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full overflow-hidden">
+            <div class="px-6 py-4 bg-bright-green text-white flex items-center justify-between">
+                <h3 class="text-lg font-semibold">Product Details</h3>
+                <button id="product-modal-close" class="text-white/90 hover:text-white">
+                    <ion-icon name="close-outline" class="w-6 h-6"></ion-icon>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="flex items-start gap-4">
+                    <div class="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img id="pm-image" src="" alt="Product image" class="w-full h-full object-cover hidden">
+                        <ion-icon id="pm-fallback" name="leaf-outline" class="w-12 h-12 text-bright-green"></ion-icon>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 id="pm-name" class="text-base font-semibold text-dark-forest-green"></h4>
+                        <p id="pm-description" class="text-sm text-light-gray mt-1"></p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-light-gray">Price</p>
+                        <p id="pm-price" class="text-sm font-medium text-dark-forest-green"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-light-gray">Status</p>
+                        <p id="pm-status" class="text-sm font-medium"></p>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-4 border-t border-gray-100">
+                    <button id="product-modal-close-2" class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}</div>
+
+<!-- Product Delete Confirmation Modal -->
+<div id="delete-product-modal" class="fixed inset-0 z-50 hidden backdrop-blur-md" style="display: none;">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all relative z-10">
+        <!-- Modal Header -->
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <ion-icon name="alert-circle-outline" class="text-2xl text-red-600"></ion-icon>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-dark-forest-green">Delete Product</h3>
+                <p class="text-xs text-light-gray">Are you sure?</p>
+            </div>
+        </div>
+
+        <!-- Modal Content -->
+        <p class="text-sm text-light-gray mb-6">
+            This action cannot be undone. The product will be permanently deleted from your catalog.
+        </p>
+
+        <!-- Modal Actions -->
+        <div class="flex gap-3">
+            <button id="delete-cancel-btn" class="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-dark-forest-green font-medium transition-colors duration-200">
+                Cancel
+            </button>
+            <button id="delete-confirm-btn" class="flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition-colors duration-200 text-center no-underline flex items-center justify-center">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mobile menu toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const mainHeader = document.getElementById('main-header');
+        
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            mobileOverlay.classList.toggle('hidden');
+            
+            if (window.innerWidth < 1024) {
+                mainHeader.classList.toggle('hidden');
+            }
+        }
+        
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('hidden');
+            
+            if (window.innerWidth < 1024) {
+                mainHeader.classList.remove('hidden');
+            }
+        }
+        
+        mobileMenuButton.addEventListener('click', toggleSidebar);
+        mobileOverlay.addEventListener('click', closeSidebar);
+        
+        document.addEventListener('click', function(event) {
+            if (window.innerWidth < 1024 && 
+                !sidebar.contains(event.target) && 
+                !mobileMenuButton.contains(event.target)) {
+                closeSidebar();
+            }
+        });
+        
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                closeSidebar();
+                mainHeader.classList.remove('hidden');
+            }
+        });
+    });
+
+    // Search functionality is handled by admin-search.js utility
+
+    // Product modal logic
+    (function() {
+        const modal = document.getElementById('product-view-modal');
+        const closeButtons = [
+            document.getElementById('product-modal-close'),
+            document.getElementById('product-modal-close-2')
+        ];
+        function openModal(row) {
+            const name = row.getAttribute('data-product-name');
+            const description = row.getAttribute('data-product-description');
+            const price = row.getAttribute('data-product-price');
+            const status = row.getAttribute('data-product-status');
+            const image = row.getAttribute('data-product-image');
+
+            document.getElementById('pm-name').textContent = name || '';
+            document.getElementById('pm-description').textContent = description || '';
+            document.getElementById('pm-price').textContent = `₱${price || '0.00'}`;
+            const statusEl = document.getElementById('pm-status');
+            statusEl.textContent = status || '';
+            statusEl.className = 'text-sm font-medium ' + ((status || '').toLowerCase().includes('available') ? 'text-green-700' : 'text-red-700');
+
+            const imgEl = document.getElementById('pm-image');
+            const fallbackEl = document.getElementById('pm-fallback');
+            if (image) {
+                imgEl.src = image;
+                imgEl.classList.remove('hidden');
+                fallbackEl.classList.add('hidden');
+            } else {
+                imgEl.classList.add('hidden');
+                fallbackEl.classList.remove('hidden');
+            }
+
+            modal.classList.remove('hidden');
+            document.documentElement.style.overflow = 'hidden';
+        }
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.documentElement.style.overflow = '';
+        }
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.open-product-modal');
+            if (btn) {
+                const row = btn.closest('.product-row');
+                if (row) openModal(row);
+            }
+        });
+        closeButtons.forEach(btn => btn && btn.addEventListener('click', closeModal));
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+    })();
+
+    // Product delete functionality
+    let productIdToDelete = null;
+    let productCsrfToken = null;
+    const deleteModal = document.getElementById('delete-product-modal');
+    const deleteCancelBtn = document.getElementById('delete-cancel-btn');
+    const deleteConfirmBtn = document.getElementById('delete-confirm-btn');
+
+    document.addEventListener('click', function(e) {
+        const deleteBtn = e.target.closest('.delete-product-btn');
+        if (!deleteBtn) return;
+        
+        productIdToDelete = deleteBtn.getAttribute('data-product-id');
+        productCsrfToken = deleteBtn.getAttribute('data-csrf-token');
+        deleteModal.style.display = 'flex';
+    });
+
+    // Close delete modal on cancel
+    deleteCancelBtn.addEventListener('click', function() {
+        deleteModal.style.display = 'none';
+        productIdToDelete = null;
+    });
+
+    // Confirm delete
+    deleteConfirmBtn.addEventListener('click', function() {
+        if (productIdToDelete) {
+            // Create a form to submit the delete request
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{{ path('app_admin_product_delete', {'id': '__ID__'}) }}".replace('__ID__', productIdToDelete);
+            
+            const tokenInput = document.createElement('input');
+            tokenInput.type = 'hidden';
+            tokenInput.name = '_token';
+            tokenInput.value = productCsrfToken || "{{ csrf_token('delete') }}";
+            
+            form.appendChild(tokenInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+
+    // Close modal when clicking outside the modal content
+    deleteModal.addEventListener('click', function(e) {
+        if (e.target === deleteModal) {
+            deleteModal.style.display = 'none';
+            productIdToDelete = null;
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && deleteModal.style.display !== 'none') {
+            deleteModal.style.display = 'none';
+            productIdToDelete = null;
+        }
+    });
+</script>
+
+{% endblock %}

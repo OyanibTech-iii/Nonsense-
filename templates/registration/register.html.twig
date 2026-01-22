@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Growfico | Register{% endblock %}
+
+{% block body %}
+	{% for flash_error in app.flashes('verify_email_error') %}
+		<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+	{% endfor %}
+
+	<div class="flex items-center justify-center min-h-screen bg-gray-100 overflow-hidden">
+		<div class="bg-bg-custom flex items-center justify-center w-[800px] max-h-screen">
+			<div
+				class="flex max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+
+				<!-- Left side - Hero Section -->
+				<div
+					class="flex-1 text-white p-12 flex flex-col justify-center relative
+						                                                                                                        bg-[linear-gradient(rgba(9,64,33,0.85),rgba(9,64,33,0.85)),url('../gardens/garden3.png')]
+                                                                                            bg-cover bg-center rounded-l-2xl">
+
+					<!-- Background pattern overlay -->
+					<div class="absolute left-7 top-3 h-9 w-auto z-20">
+						<img src="{{ asset('logos/No-tagline.png') }}" alt="Growfico" style="height: 2rem; width: auto;"/>
+					</div>
+
+					<div class="relative z-10">
+						<div class="mb-8">
+							<h2 class="text-4xl font-bold mb-6 leading-tight">
+								Cultivating<br>
+								Green<br>
+								Futures
+							</h2>
+							<p class="text-lg opacity-90">
+								Nurture your garden and track your<br>
+								growth journey with Growfico.
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Right side - Form Section -->
+				<div class="flex-1 p-12 flex flex-col justify-center">
+					<div class="max-w-lg mx-auto w-full">
+						<h2 class="text-xl font-sans font-bold text-dark-forest-green mb-2">Create your account</h2>
+						<p class="font-sans text-sm text-light-gray mb-2">
+							Already have an account?
+							<a href="{{ path('app_login') }}" class="text-bright-green font-sm hover:underline">Log in</a>
+						</p>
+
+						{{ form_start(registrationForm, {'attr': {'class': 'space-y-1 py-3'}}) }}
+
+						<div>
+							{{ form_label(registrationForm.firstName, 'First name', {'label_attr': {'class': 'block text-gray-700 text-sm font-medium'}}) }}
+							{{ form_widget(registrationForm.firstName, {'attr': {'class': 'w-full py-1 px-0 border-0 border-b-2 border-gray-200 focus:border-bright-green focus:outline-none transition-colors duration-200 bg-transparent'}}) }}
+							{{ form_errors(registrationForm.firstName) }}
+						</div>
+
+						<div>
+							{{ form_label(registrationForm.lastName, 'Last name', {'label_attr': {'class': 'block text-gray-700 text-sm font-medium'}}) }}
+							{{ form_widget(registrationForm.lastName, {'attr': {'class': 'w-full py-1 px-0 border-0 border-b-2 border-gray-200 focus:border-bright-green focus:outline-none transition-colors duration-200 bg-transparent'}}) }}
+							{{ form_errors(registrationForm.lastName) }}
+						</div>
+
+						<div>
+							{{ form_label(registrationForm.email, 'Email address', {'label_attr': {'class': 'block text-gray-700 text-sm font-medium mb-0'}}) }}
+							{{ form_widget(registrationForm.email, {'attr': {'class': 'w-full px-0 py-1 border-0 border-b-2 border-gray-200 focus:border-bright-green focus:outline-none transition-colors duration-200 bg-transparent'}}) }}
+							{{ form_errors(registrationForm.email) }}
+						</div>
+
+						<div class="relative">
+							{{ form_label(registrationForm.plainPassword, 'Password', {'label_attr': {'class': 'block text-gray-700 text-sm font-medium mb-0'}}) }}
+							{{ form_widget(registrationForm.plainPassword, {'attr': {'id': 'password', 'class': 'w-full px-0 py-1 border-0 border-b-2 border-gray-200 focus:border-bright-green focus:outline-none transition-colors duration-200 bg-transparent pr-8'}}) }}
+							{{ form_errors(registrationForm.plainPassword) }}
+							<button type="button" onclick="togglePassword('password')" class="absolute right-0 top-5 text-dark-forest-green hover:text-bright-green focus:outline-none">
+								<svg id="password-eye" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0
+									                                                                                                                                                                                       8.268 2.943 9.542 7-1.274 4.057-5.065
+									                                                                                                                                                                                       7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+								</svg>
+							</button>
+						</div>
+
+						{% if registrationForm.confirmPassword is defined %}
+							<div class="relative">
+								{{ form_label(registrationForm.confirmPassword, 'Confirm password', {'label_attr': {'class': 'block text-gray-700 text-sm font-medium mb-0'}}) }}
+								{{ form_widget(registrationForm.confirmPassword, {'attr': {'id': 'confirm-password', 'class': 'w-full px-0 py-1 border-0 border-b-2 border-gray-200 focus:border-bright-green focus:outline-none transition-colors duration-200 bg-transparent pr-8'}}) }}
+								{{ form_errors(registrationForm.confirmPassword) }}
+								<button type="button" onclick="togglePassword('confirm-password')" class="absolute right-0 top-5 text-dark-forest-green hover:text-bright-green  focus:outline-none">
+									<svg id="confirm-password-eye" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewbox="0 0 24 24" stroke="currentColor">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0
+										                                                                                                                                                                                       8.268 2.943 9.542 7-1.274 4.057-5.065
+										                                                                                                                                                                                       7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+									</svg>
+								</button>
+							</div>
+						{% endif %}
+
+						<div class="flex items-start space-x-3 py-3">
+							{{ form_widget(registrationForm.agreeTerms, {'attr': {'id': 'terms', 'class': 'mt-1 h-4 w-4 border-gray-300 rounded text-dark-forest-green focus:ring-dark-forest-green checked:bg-dark-forest-green checked:border-dark-forest-green'}}) }}
+							<label for="terms" class="text-sm text-gray-600 ">
+								I agree to the
+								<a href="{{path('app_terms')}}" class="text-bright-green hover:underline">Terms</a>
+								and
+								<a href="{{path('app_privaypolicy')}}" class="text-bright-green hover:underline">Privacy Policy</a>.
+							</label>
+							{{ form_errors(registrationForm.agreeTerms) }}
+						</div>
+
+						<button type="submit" class="w-full bg-bright-green text-white py-4 px-4 rounded-2xl font-bold text-sm hover:bg-opacity-90 transition-all duration-200 mt-4">
+							CREATE ACCOUNT
+						</button>
+
+						{{ form_end(registrationForm) }}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function togglePassword(fieldId) {
+const input = document.getElementById(fieldId);
+const eyeIcon = document.getElementById(fieldId + '-eye');
+
+if (! input) 
+return;
+
+
+if (input.type === "password") {
+input.type = "text";
+if (eyeIcon) {
+eyeIcon.innerHTML = `
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M13.875 18.825A10.05 10.05 0 0112 19
+             c-4.477 0-8.268-2.943-9.542-7
+             a9.956 9.956 0 012.97-4.533M6.219 6.219
+             A9.956 9.956 0 0112 5c4.477 0 8.268 
+             2.943 9.542 7a9.96 9.96 0 01-4.132 
+             5.411M15 12a3 3 0 11-6 0 
+             3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 3l18 18" stroke="#094021" />`;
+}
+} else {
+input.type = "password";
+if (eyeIcon) {
+eyeIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M2.458 12C3.732 7.943 7.523 5 
+             12 5c4.477 0 8.268 2.943 
+             9.542 7-1.274 4.057-5.065 
+             7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      `;
+}
+}
+}
+	</script>
+{% endblock %}

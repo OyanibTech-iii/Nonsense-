@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="flex min-h-screen bg-background">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white shadow-lg border border-gray-200 text-light-gray hover:text-dark-forest-green hover:bg-gray-50 transition-colors duration-200">
+        <ion-icon name="menu-outline" class="text-xl"></ion-icon>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed lg:fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-200 flex flex-col shadow-sm transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+        <!-- Logo Section -->
+        <div class="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
+            <div class="w-10 h-10 rounded-xl overflow-hidden shadow-sm ring-1 ring-gray-200">
+                <img src="{{ asset('logos/Icon- Brand.png') }}" alt="Growfico" class="w-full h-full object-cover object-center"/>
+            </div>
+            <div>
+                <h1 class="text-lg font-semibold text-dark-forest-green">Growfico</h1>
+                <p class="text-xs text-light-gray">Admin Dashboard</p>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 px-4 py-6 space-y-1">
+            {% set links = [
+                {'label': 'Dashboard', 'route': path('app_admin_dashboard'), 'icon': 'grid-outline', 'route_name': 'app_admin_dashboard'},
+                {'label': 'User Management', 'route': path('app_admin_users'), 'icon': 'people-outline', 'route_name': 'app_admin_users'},
+                {'label': 'Product Management', 'route': path('app_admin_products'), 'icon': 'pricetags-outline', 'route_name': 'app_admin_products'},
+                {'label': 'Stock Management', 'route': path('app_admin_stocks'), 'icon': 'cube-outline', 'route_name': 'app_admin_stocks'},
+                {'label': 'Activity Logs', 'route': path('app_admin_logs'), 'icon': 'time-outline', 'route_name': 'app_admin_logs'},
+            ] %}
+
+            {% for item in links %}
+                {% set is_active = app.request.get('_route') == item.route_name %}
+                
+                <a href="{{ item.route }}" 
+                    class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 
+                    {{ is_active 
+                        ? 'bg-primary-50 text-bright-green shadow-sm ring-1 ring-primary-200' 
+                        : 'text-light-gray hover:bg-gray-50 hover:text-dark-forest-green' 
+                    }}">
+                    <ion-icon name="{{ item.icon }}" 
+                        class="text-lg transition-colors duration-200
+                        {{ is_active ? 'text-bright-green' : 'text-gray-400 group-hover:text-light-gray' }}"></ion-icon>
+                    <span class="flex-1">{{ item.label }}</span>
+                    {% if is_active %}
+                        <div class="w-1.5 h-1.5 rounded-full bg-bright-green"></div>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="px-6 py-4 border-t border-gray-100 text-xs text-light-gray">
+            <p>&copy; {{ "now"|date("Y") }} Growfico. All rights reserved.</p>
+        </div>
+    </aside>
+
+    <!-- Mobile Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden"></div>
+
+    <!-- Main Content Area -->
+    <div class="flex flex-col flex-1 min-w-0 lg:ml-72">
+        <!-- Header -->
+        <header id="main-header" class="sticky top-0 z-30 bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    {% block header_title %}
+                    <h2 class="text-xl font-semibold text-dark-forest-green">Admin Page</h2>
+                    <p class="text-sm text-light-gray">Manage your application</p>
+                    {% endblock %}
+                </div>
+                <!-- User Profile and Logout Section -->
+                <div class="flex items-center gap-2">
+                    <!-- User Profile Section -->
+                    <a href="{{ path('app_admin_profile') }}" class="flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors duration-200 cursor-pointer no-underline">
+                        <div class="w-10 h-10 bg-gradient-to-br mr-2 from-bright-green to-primary-600 text-white flex items-center justify-center rounded-full font-semibold text-sm overflow-hidden">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                {% if app.user.profileImage %}
+                                    <img src="{{ asset(app.user.profileImage) }}" alt="Profile" class="w-full h-full object-cover">
+                                {% else %}
+                                    {{ app.user.firstName ? app.user.firstName|first|upper : app.user.email|first|upper }}
+                                {% endif %}
+                            {% else %}
+                                A
+                            {% endif %}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <p class="text-sm font-medium text-dark-forest-green truncate">{{ app.user.getFullName() ?? 'Admin User' }}</p>
+                                <p class="text-xs text-light-gray truncate">{{ app.user.email }}</p>
+                            {% else %}
+                                <p class="text-sm font-medium text-dark-forest-green truncate">Admin User</p>
+                                <p class="text-xs text-light-gray truncate">user@growfico.app</p>
+                            {% endif %}
+                        </div>
+                    </a>
+                    <!-- Logout Button -->
+                    <button id="logout-btn" title="Logout" class="p-2 rounded-full hover:bg-gray-100 text-light-gray hover:text-dark-forest-green transition-colors duration-200" aria-label="Logout">
+                        <ion-icon name="log-out-outline" class="text-xl"></ion-icon>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-y-auto">
+            {% block admin_content %}
+            <!-- Content block for child templates -->
+            {% endblock %}
+        </main>
+    </div>
+</div>
+
+<!-- Logout Confirmation Modal -->
+<div id="logout-modal" class="fixed inset-0 z-50 hidden backdrop-blur-md" style="display: none;">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+    <div class="absolute inset-0 flex items-center justify-center">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all relative z-10">
+        <!-- Modal Header -->
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                <ion-icon name="alert-circle-outline" class="text-2xl text-red-600"></ion-icon>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-dark-forest-green">Confirm Logout</h3>
+                <p class="text-xs text-light-gray">Are you sure you want to logout?</p>
+            </div>
+        </div>
+
+        <!-- Modal Content -->
+        <p class="text-sm text-light-gray mb-6">
+            You will be logged out of your admin account. You can log back in anytime with your credentials.
+        </p>
+
+        <!-- Modal Actions -->
+        <div class="flex gap-3">
+            <button id="logout-cancel-btn" class="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-dark-forest-green font-medium transition-colors duration-200">
+                Cancel
+            </button>
+            <a id="logout-confirm-btn" href="{{ path('app_logout') }}" class="flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition-colors duration-200 text-center no-underline flex items-center justify-center">
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="{{ asset('js/admin-sidebar.js') }}"></script>
+<script>
+    // Logout Modal Functionality
+    const logoutBtn = document.getElementById('logout-btn');
+    const logoutModal = document.getElementById('logout-modal');
+    const logoutCancelBtn = document.getElementById('logout-cancel-btn');
+    const logoutConfirmBtn = document.getElementById('logout-confirm-btn');
+
+    // Open logout modal
+    logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        logoutModal.style.display = 'flex';
+    });
+
+    // Close logout modal on cancel
+    logoutCancelBtn.addEventListener('click', function() {
+        logoutModal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside the modal content
+    logoutModal.addEventListener('click', function(e) {
+        if (e.target === logoutModal) {
+            logoutModal.style.display = 'none';
+        }
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && logoutModal.style.display !== 'none') {
+            logoutModal.style.display = 'none';
+        }
+    });
+</script>
+{% endblock %}

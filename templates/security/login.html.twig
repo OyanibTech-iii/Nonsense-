@@ -1,0 +1,198 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in | Growfico{% endblock %}
+
+{% block body %}
+
+<div class="flex items-center justify-center min-h-screen bg-gray-100 overflow-hidden">
+    <div class="bg-bg-custom flex items-center justify-center w-[800px] max-h-screen">
+        <div class="flex max-w-2xl w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+
+            <!-- Left side - Form Section -->
+            <div class="flex-1 p-12 flex flex-col justify-center">
+                <div class="max-w-lg mx-auto w-full">
+                    <h2 class="text-xl font-sans font-bold text-dark-forest-green mb-2">Log in</h2>
+                    <p class="font-sans text-sm text-light-gray mb-2">
+                        Don't have an account?
+                        <a href="{{ path('app_register') }}" class="text-bright-green font-sm hover:underline">Create
+                            one</a>
+                    </p>
+
+                    {% if error %}
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
+                        <strong class="font-bold">Error:</strong>
+                        <span class="block sm:inline">{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                    </div>
+                    {% endif %}
+
+                    <form id="login-form" method="post" accept-charset="UTF-8" class="space-y-4 py-3" data-turbo="false" autocomplete="off">
+                        {# Preserve Symfony form-login field names #}
+                        <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                            value="{{ csrf_token('authenticate') }}">
+
+                        <div>
+                            <label for="email" class="block text-gray-700 text-sm font-medium">Email</label>
+                            <input id="email" type="email" name="email" required autofocus
+                                class="w-full py-1 px-0 border-0 border-b-2 border-gray-200 focus:border-bright-green focus:outline-none transition-colors duration-200 bg-transparent"
+                                placeholder="">
+                        </div>
+
+                        <div class="relative">
+                            <label for="password" class="block text-gray-700 text-sm font-medium mb-0">Password</label>
+                            <input id="password" type="password" name="password" required minlength="8"
+                                class="w-full px-0 py-1 border-0 border-b-2 border-gray-200 focus:border-bright-green focus:outline-none transition-colors duration-200 bg-transparent pr-8"
+                                placeholder="">
+                            <!-- Eye Icon -->
+                            <button type="button" onclick="togglePassword('password')"
+                                class="absolute right-0 top-5 text-dark-forest-green hover:text-bright-green focus:outline-none">
+                                <!-- Default: eye closed -->
+                                <svg id="password-eye" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                    viewbox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0
+                                                                                                                                                                 8.268 2.943 9.542 7-1.274 4.057-5.065
+                                                                                                            7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="flex items-start space-x-3 py-3">
+                            <input type="checkbox" id="_remember_me" name="_remember_me" value="1"
+                                class="mt-1 h-4 w-4 border-gray-300 rounded text-dark-forest-green focus:ring-dark-forest-green checked:bg-dark-forest-green checked:border-dark-forest-green" />
+                            <label for="_remember_me" class="text-sm text-gray-600">
+                                Remember me
+                            </label>
+                        </div>
+
+                        <button type="submit"
+                            class="w-full bg-bright-green text-white py-4 px-4 rounded-2xl font-bold text-sm hover:bg-opacity-90 transition-all duration-200 mt-4">
+                            SIGN IN
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right side - Hero Section -->
+            <div class="flex-1 text-white p-12 flex flex-col justify-center relative
+                                            bg-[linear-gradient(rgba(9,64,33,0.85),rgba(9,64,33,0.85)),url('../gardens/garden3.png')]
+                                        bg-cover bg-center rounded-r-2xl">
+
+                <!-- Background pattern overlay -->
+                <div class="absolute right-7 top-3 h-9 w-auto z-20">
+                    <img src="{{ asset('logos/No-tagline.png') }}" alt="Growfico" style="height: 2rem; width: auto;" />
+                </div>
+
+                <div class="relative z-10">
+                    <div class="mb-8">
+                        <h2 class="text-4xl font-bold mb-6 leading-tight">
+                            Cultivating<br>
+                            Green<br>
+                            Futures
+                        </h2>
+                        <p class="text-lg opacity-90">
+                            Nurture your garden and track your<br>
+                            growth journey with Growfico.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{# Include shared loading overlay partial #}
+{% include 'security/loading.html.twig' %}
+<script>
+    function togglePassword(fieldId) {
+        const input = document.getElementById(fieldId);
+        const eyeIcon = document.getElementById(fieldId + '-eye');
+
+        if (input.type === "password") {
+            input.type = "text";
+            eyeIcon.innerHTML = `
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M13.875 18.825A10.05 10.05 0 0112 19
+             c-4.477 0-8.268-2.943-9.542-7
+             a9.956 9.956 0 012.97-4.533M6.219 6.219
+             A9.956 9.956 0 0112 5c4.477 0 8.268 
+             2.943 9.542 7a9.96 9.96 0 01-4.132 
+             5.411M15 12a3 3 0 11-6 0 
+             3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M3 3l18 18" stroke="#094021" />`;
+        } else {
+            input.type = "password";
+            eyeIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+          d="M2.458 12C3.732 7.943 7.523 5 
+             12 5c4.477 0 8.268 2.943 
+             9.542 7-1.274 4.057-5.065 
+             7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      `;
+        }
+    }
+
+    // Show loading overlay on form submit to reduce extra requests
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('login-form');
+        const overlay = document.getElementById('loading-overlay');
+
+        if (!form || !overlay) return;
+
+        form.addEventListener('submit', function (e) {
+            console.log('[login] submit handler triggered');
+            // Prevent immediate navigation so we can display the overlay for at least 3s
+            e.preventDefault();
+
+            // Disable form controls to avoid duplicate submits
+            const submitBtns = form.querySelectorAll('button[type="submit"], input[type="submit"]');
+            const inputs = form.querySelectorAll('input, button, select, textarea');
+            submitBtns.forEach(b => b.disabled = true);
+            inputs.forEach(i => i.setAttribute('aria-disabled', 'true'));
+
+            try {
+                // Show overlay (use inline styles as a fallback if Tailwind isn't applied)
+                overlay.classList.remove('hidden');
+                // ensure overlay is visible as a block (match other modals)
+                overlay.style.display = 'block';
+                overlay.style.zIndex = '9999';
+
+                // Animate modal pop-in (fade + scale)
+                const modal = overlay.querySelector('#loading-modal');
+                if (modal) {
+                    // ensure starting state (use inline styles as well)
+                    modal.style.opacity = '0';
+                    modal.style.transform = 'scale(0.95)';
+                    // allow CSS transition to run
+                    requestAnimationFrame(function() {
+                        modal.style.transition = modal.style.transition || 'transform 300ms ease-out, opacity 300ms ease-out';
+                        modal.style.opacity = '1';
+                        modal.style.transform = 'scale(1)';
+                    });
+                }
+            } catch (err) {
+                console.error('[login] error while showing overlay', err);
+                // cleanup in case of error so user can retry
+                submitBtns.forEach(b => b.disabled = false);
+                inputs.forEach(i => i.removeAttribute('aria-disabled'));
+                overlay.classList.remove('flex');
+                overlay.classList.add('hidden');
+                overlay.style.display = 'none';
+                return;
+            }
+
+            // Minimum display time (3 seconds) to reduce quick repeated requests
+            const MIN_MS = 1000;
+            setTimeout(function() {
+                console.log('[login] submitting after delay');
+                // Submit the form programmatically after the delay
+                form.submit();
+            }, MIN_MS);
+        });
+    });
+</script>
+
+{% endblock %}

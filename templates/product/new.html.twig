@@ -1,0 +1,28 @@
+{% extends 'user_page/base_user.html.twig' %}
+
+{% block title %}Add New Product - Growfico{% endblock %}
+
+{% block page_title %}Add New Product{% endblock %}
+{% block page_subtitle %}Create a new product to add to your inventory{% endblock %}
+
+{% block user_content %}
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {# <div class="flex justify-end mb-4">
+            {% if app.request.get('_route') starts with 'app_admin_' %}
+                <a href="{{ path('app_admin_products') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-100 text-dark-forest-green font-semibold rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                    <ion-icon name="arrow-back-outline" class="w-4 h-4 mr-2"></ion-icon>
+                    Back to Products
+                </a>
+            {% else %}
+                <a href="{{ path('app_product_index') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-100 text-dark-forest-green font-semibold rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                    <ion-icon name="arrow-back-outline" class="w-4 h-4 mr-2"></ion-icon>
+                    Back to Products
+                </a>
+            {% endif %}
+        </div> #}
+
+        {{ include('product/_form.html.twig') }}
+    </div>
+{% endblock %}

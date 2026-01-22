@@ -1,0 +1,242 @@
+<main
+	class="main">
+	<!-- Hero Section -->
+	<section class="hero bg-gradient-to-br from-green-50 to-gray-50 py-20">
+		<div class="container max-w-6xl mx-auto px-4">
+			<div class="text-center">
+				<h1 class="text-5xl font-bold text-dark-forest-green mb-6">
+					Our
+					<span class="text-bright-green">Products</span>
+				</h1>
+				<p class="text-xl text-light-gray leading-relaxed mb-8 max-w-3xl mx-auto">
+					Discover our premium selection of seedlings, growing supplies, and educational resources 
+					                    designed to help you cultivate thriving gardens.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Product Categories -->
+	<section class="py-20 bg-white">
+		<div class="container max-w-6xl mx-auto px-4">
+			<div class="text-center mb-16">
+				<h2 class="text-4xl font-bold text-dark-forest-green mb-6">Products and Services</h2>
+				<p class="text-lg text-light-gray">Choose from our carefully curated selection of growing essentials.</p>
+			</div>
+
+			<div
+				class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+				<!-- Premium Seedlings -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+					<div class="h-64 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+						<img src="{{ asset('seedlings/jackfruit.png') }}" alt="Premium Seedlings" class="h-full w-full object-cover object-center">
+					</div>
+					<div class="p-6">
+						<h3 class="text-xl font-bold text-dark-forest-green mb-3">Premium Seedlings</h3>
+						<p class="text-light-gray mb-4">High-quality fruit tree seedlings including avocado, mango, and citrus varieties.</p>
+					</div>
+				</div>
+
+				<!-- Growing Supplies -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+					<div class="h-64 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+					<img src="{{ asset('site/garden2.png') }}" alt="Premium Seedlings" class="h-full w-full object-cover object-center">
+					</div>
+					<div class="p-6">
+						<h3 class="text-xl font-bold text-dark-forest-green mb-3">Growing Supplies</h3>
+						<p class="text-light-gray mb-4">Essential tools and supplies for successful gardening and plant care.</p>
+					</div>
+				</div>
+
+				<!-- Educational Resources -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+					<div
+						class="h-64 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+						{# <ion-icon name="book-outline" class="text-8xl text-bright-green"></ion-icon> #}
+						<img src="{{ asset('learning/learning.png') }}" alt="Premium Seedlings" class="h-full w-full object-cover object-center">
+					</div>
+					<div class="p-6">
+						<h3 class="text-xl font-bold text-dark-forest-green mb-3">Educational Resources</h3>
+						<p class="text-light-gray mb-4">Comprehensive guides and courses on growing techniques and plant care.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Featured Products -->
+	<section class="py-20 bg-gradient-to-br from-green-50 to-gray-50">
+		<div class="container max-w-2xl mx-auto px-4">
+			<div class="text-center mb-16">
+				<h2 class="text-4xl font-bold text-dark-forest-green mb-6">Featured Products</h2>
+				<p class="text-lg text-light-gray">Our most popular and highly-rated products.</p>
+			</div>
+
+			<div
+				class="grid grid-cols-1 md:grid-cols-2 gap-8">
+				<!-- Avocado Seedling -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+					<div class="h-40 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+						<img src="{{ asset('plants/AVOCADO.png') }}" alt="Avocado Seedling" class="h-full w-full object-cover object-center">
+					</div>
+					<div class="p-8">
+						<h3 class="text-base font-bold text-dark-forest-green mb-3">Premium Avocado Seedling</h3>
+						<p class="text-light-gray mb-4 text-xs">High-quality Hass avocado seedling, perfect for home gardens. Grown using our expert grafting techniques for optimal growth and fruit production.</p>
+					</div>
+				</div>
+
+				<!-- Mango Seedling -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+					<div class="h-40 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+						<img src="{{ asset('plants/MANGO.png') }}" alt="Mango Seedling" class="h-full w-full object-cover object-center">
+					</div>
+					<div class="p-8">
+						<h3 class="text-base font-bold text-dark-forest-green mb-3">Premium Mango Seedling</h3>
+						<p class="text-light-gray mb-4 text-xs">Sweet and juicy mango seedling, ideal for tropical and subtropical climates. Grown using air layering technique for superior quality.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Recent Products (React -> Twig/Tailwind conversion) -->
+	{% set products = [
+		{image: asset('showcasePlants/guava.png'), name: 'Red Malaysian Guava', supplier: 'Aira Sabas', stock: '90 pcs @ $541', price: '₱140'},
+		{image: asset('showcasePlants/grape.png'), name: 'Cempedak Premium Grapes', supplier: 'Sandhia Ale Currimjee', stock: '180 pcs @ $wel', price: '₱210'},
+		{image: asset('showcasePlants/jackfruit.png'), name: 'Manobilla Rambutan',  supplier: 'Carmen Ale Seedlings', stock: '90 pcs @ $655', price: '₱130'},
+		{image: asset('showcasePlants/guyabano.png'), name: 'Durazino El3', supplier: 'Latycia Ale Cuttings', stock: '540 pcs @ $ssl', price: '₱210'},
+	] %}
+
+	<section id="products" class="bg-gray-50 py-20">
+		<div class="container mx-auto px-4">
+			<div class="mb-12 text-center">
+				<h2 class="text-3xl mb-2 text-dark-forest-green">Recent Products</h2>
+				<p class="text-gray-600">Latest products in inventory</p>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+				{% for p in products %}
+					<div class="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+						<div class="aspect-square bg-gradient-to-br from-emerald-800 to-emerald-900 flex items-center justify-center p-3">
+							<img src="{{ p.image }}" alt="{{ p.name }}" class="w-full h-full object-contain" style="margin: 20px;" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'400\'><rect width=\'100%\' height=\'100%\' fill=\'%23e5e7eb\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%236B7280\' font-family=\'Arial, Helvetica, sans-serif\' font-size=\'18\'>Image Unavailable</text></svg>'">
+						</div>
+						<div class="p-3">
+							<h3 class="mb-1 font-semibold text-dark-forest-green text-base">{{ p.name }}</h3>
+							<div class="text-xs text-gray-600 mb-2">{{ p.supplier }}</div>
+							<div class="text-xs text-gray-500 mb-3">{{ p.stock }}</div>
+							<div class="text-lg text-emerald-600">{{ p.price }}</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+
+			<!-- Pagination -->
+			<div class="flex items-center justify-center gap-2">
+				<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-white transition-colors" aria-label="Previous">
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+						<path fill-rule="evenodd" d="M12.707 14.707a1 1 0 01-1.414 0L7.586 11l3.707-3.707a1 1 0 011.414 1.414L10.414 11l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+					</svg>
+				</button>
+				<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-emerald-500 text-white">1</button>
+				<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-white transition-colors">2</button>
+				<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-white transition-colors">...</button>
+				<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-white transition-colors">9</button>
+				<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-white transition-colors">10</button>
+				<button class="w-10 h-10 flex items-center justify-center rounded-lg border border-gray-300 hover:bg-white transition-colors" aria-label="Next">
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+						<path fill-rule="evenodd" d="M7.293 5.293a1 1 0 011.414 0L12.414 9l-3.707 3.707a1 1 0 01-1.414-1.414L9.586 9 7.293 6.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+					</svg>
+				</button>
+			</div>
+		</div>
+	</section>
+
+	<!-- Featured Services -->
+	<section class="py-20 bg-gradient-to-br from-green-50 to-gray-50">
+		<div class="container max-w-6xl mx-auto px-4">
+			<div class="text-center mb-16">
+				<h2 class="text-4xl font-bold text-dark-forest-green mb-6">Featured Services</h2>
+				<p class="text-lg text-light-gray">Our most popular and highly-offered services</p>
+			</div>
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+				<!-- Workshop Gardening Service -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+					<div class="h-80 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+						<img src="{{ asset('services/workshop gardening.png') }}" alt="Workshop Gardening Service" class="h-full w-full object-cover object-center">
+					</div>
+					<div class="p-8">
+						<h3 class="text-2xl font-bold text-dark-forest-green mb-3">Workshop Gardening</h3>
+						<p class="text-light-gray mb-4">Learn essential gardening techniques through our hands-on workshops. Master grafting, air layering, and budding methods with expert guidance. Perfect for beginners and experienced growers.</p>
+						<div class="flex items-center gap-3 text-bright-green">
+							<ion-icon name="checkmark-outline"></ion-icon>
+							<span class="font-medium">Educational Service</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Land Transformation Service -->
+				<div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+					<div class="h-80 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center">
+						<img src="{{ asset('services/landtransformation.png') }}" alt="Land Transformation Service" class="h-full w-full object-cover object-center">
+					</div>
+					<div class="p-8">
+						<h3 class="text-2xl font-bold text-dark-forest-green mb-3">Land Transformation</h3>
+						<p class="text-light-gray mb-4">Transform your space into a productive garden paradise. Our experts help design and implement sustainable growing systems tailored to your specific land and climate conditions.</p>
+						<div class="flex items-center gap-3 text-bright-green">
+							<ion-icon name="checkmark-outline"></ion-icon>
+							<span class="font-medium">Consultation Service</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+</main>
+
+<!-- Scroll Animation JavaScript -->
+<script>
+	function initScrollAnimations() {
+const observerOptions = {
+threshold: 0.1,
+rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('animate-fade-in');
+}
+});
+}, observerOptions);
+
+// Observe all scroll elements
+document.querySelectorAll('section, .hero-content').forEach(el => {
+observer.observe(el);
+});
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', initScrollAnimations);
+</script>
+
+<style>
+	.animate-fade-in {
+		animation: fadeInUp 0.8s ease-out forwards;
+	}
+
+	@keyframes fadeInUp {
+		from {
+			opacity: 0;
+			transform: translateY(30px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>
+{% include 'footer/index.html.twig' %}

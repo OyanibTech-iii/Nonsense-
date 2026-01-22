@@ -1,0 +1,234 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Growfico | Cultivates Green Future{% endblock %}
+
+{% block body %}
+
+	{{ encore_entry_link_tags('app') }}
+	<nav class="sticky top-0 z-50 w-full px-4 py-2 bg-white/95">
+		<ul
+			class="flex flex-row items-center justify-center gap-16 list-none bg-white p-4 mt-0 rounded-lg shadow-[0_4px_16px_rgba(3,166,74,0.07),0_2px_8px_rgba(0,0,0,0.03)] w-full">
+			<li class="flex-shrink-0">
+				<img src="{{ asset('logos/No-tagline.png') }}" alt="Growfico" style="height: 2rem; width: auto;"/>
+			</li>
+
+			<li class="relative flex items-center gap-2 text-dark-forest-green cursor-pointer transition-all duration-200 py-2 px-4 group nav-link" data-section="home">
+				<a href="#" class="flex items-center gap-2 no-underline relative">
+					<span class="nav-icon">
+						<ion-icon name="home-outline" class="text-base text-dark-forest-green"></ion-icon>
+					</span>
+					<span class="font-medium text-sm">Home</span>
+					<!-- Underline -->
+					<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-bright-green transition-all duration-300"></span>
+				</a>
+			</li>
+
+			<!-- About Us -->
+			<li class="relative flex items-center gap-2 text-dark-forest-green cursor-pointer transition-all duration-200 py-2 px-4 group nav-link" data-section="about">
+				<a href="#" class="flex items-center gap-2 no-underline relative">
+					<span class="nav-icon">
+						<ion-icon name="people-outline" class="text-base text-dark-forest-green"></ion-icon>
+					</span>
+					<span class="font-medium text-sm">About Us</span>
+					<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-bright-green transition-all duration-300"></span>
+				</a>
+			</li>
+
+			<!-- Contacts -->
+			<li class="relative flex items-center gap-2 text-dark-forest-green cursor-pointer transition-all duration-200 py-2 px-4 group nav-link" data-section="contacts">
+				<a href="#" class="flex items-center gap-2 no-underline relative">
+					<span class="nav-icon">
+						<ion-icon name="call-outline" class="text-base text-dark-forest-green"></ion-icon>
+					</span>
+					<span class="font-medium text-sm">Contacts</span>
+					<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-bright-green transition-all duration-300"></span>
+				</a>
+			</li>
+
+			<!-- Products Link -->
+			<li class="relative flex items-center gap-2 text-dark-forest-green cursor-pointer transition-all duration-200 py-2 px-4 group nav-link" data-section="products">
+				<a href="#" class="flex items-center gap-2 no-underline relative">
+					<span class="nav-icon">
+						<ion-icon name="restaurant-outline" class="text-base text-dark-forest-green"></ion-icon>
+					</span>
+					<span class="font-medium text-sm">Products</span>
+					<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 group-hover:w-full h-[2px] bg-bright-green transition-all duration-300"></span>
+				</a>
+			</li>
+
+			<!-- Login Container -->
+			<li class="flex gap-2 ml-4 flex-shrink-0">
+				<a href="{{ path('app_login') }}" class="relative ml-10 text-sm text-dark-forest-green border-2 border-light-green rounded-md py-2 px-5 font-medium cursor-pointer
+																								            transition-all duration-300 ease-in-out
+																								            hover:bg-dark-forest-green hover:text-background hover:shadow-lg hover:-translate-y-0.5">
+					LOGIN
+				</a>
+				<a href="{{ path('app_register') }}" class="relative bg-bright-green text-white text-sm border-2 border-bright-green rounded-md py-2 px-5 font-medium cursor-pointer
+																								            transition-all duration-300 ease-in-out
+																								            hover:bg-dark-forest-green hover:text-white hover:border-dark-forest-green hover:shadow-lg hover:-translate-y-0.5">
+					REGISTER
+				</a>
+			</li>
+		</ul>
+	</nav>
+
+	<!-- Main Content Container -->
+	<main id="main-content" class="min-h-screen">
+		<div id="home-content" class="content-section active">
+			{% include 'landinpage/home.html.twig' %}
+		</div>
+		<div id="about-content" class="content-section">
+			{% include 'landinpage/about.html.twig' %}
+		</div>
+		<div id="contacts-content" class="content-section">
+			{% include 'landinpage/contacts.html.twig' %}
+		</div>
+		<div id="products-content" class="content-section">
+			{% include 'landinpage/products.html.twig' %}
+		</div>
+	</main>
+	<!-- Single Page Application JavaScript -->
+	<script>
+		// Read initial page from server-side (Twig). Defaults to 'home'.
+const initialPage = "{{ page|default('home')|e('js') }}";
+
+// Initialize SPA navigation
+function initSPANavigation() {
+	const navLinks = document.querySelectorAll('.nav-link');
+	const contentSections = document.querySelectorAll('.content-section');
+
+	// Helper function to set active nav state
+	function setActiveNav(activeLink) {
+		navLinks.forEach(link => {
+			link.classList.remove('active');
+			const a = link.querySelector('a');
+			if (a) {
+				a.classList.remove('text-bright-green');
+				a.removeAttribute('aria-current');
+			}
+		});
+
+		if (!activeLink) return;
+		activeLink.classList.add('active');
+		const aa = activeLink.querySelector('a');
+		if (aa) {
+			aa.classList.add('text-bright-green');
+			aa.setAttribute('aria-current', 'page');
+		}
+	}
+
+	// Show content with smooth animation using class toggles
+	function showContent(sectionId) {
+		// Remove active class from all sections
+		contentSections.forEach(section => {
+			section.classList.remove('active');
+		});
+
+		// Add active class to the selected section
+		const targetSection = document.getElementById(sectionId);
+		if (targetSection) {
+			targetSection.classList.add('active');
+
+			// Reveal any scroll-animated children immediately when a section becomes active
+			const animatedChildren = targetSection.querySelectorAll('.scroll-fade-in, .scroll-image, .morph-image, .slide-reveal');
+			animatedChildren.forEach((el, i) => { // small stagger
+				el.classList.add('animate-fade-in');
+				el.style.transitionDelay = `${
+					i * 0.06
+				}s`;
+			});
+
+			// Remove animate class from non-active sections
+			contentSections.forEach(section => {
+				if (section.id !== sectionId) {
+					const cs = section.querySelectorAll('.scroll-fade-in, .scroll-image, .morph-image, .slide-reveal');
+					cs.forEach(el => {
+						el.classList.remove('animate-fade-in');
+						el.style.transitionDelay = '';
+					});
+				}
+			});
+		}
+	}
+
+	// Add click handlers to navigation links
+	navLinks.forEach(link => {
+		link.addEventListener('click', function (e) {
+			e.preventDefault();
+			const section = this.getAttribute('data-section');
+			const sectionId = section + '-content';
+
+			setActiveNav(this);
+			showContent(sectionId);
+		});
+	});
+
+	// Initialize: determine which section to show
+	const desiredSection = initialPage || 'home';
+	const desiredLink = document.querySelector(`[data-section="${desiredSection}"]`);
+	if (desiredLink) {
+		setActiveNav(desiredLink);
+		showContent(desiredSection + '-content');
+	} else {
+		// fallback to home
+		const homeLink = document.querySelector('[data-section="home"]');
+		if (homeLink) {
+			setActiveNav(homeLink);
+			showContent('home-content');
+		}
+	}
+}
+
+// Initialize SPA navigation when DOM is loaded
+document.addEventListener('DOMContentLoaded', initSPANavigation);
+	</script>
+
+	<style>
+		/* Show only active content sections */
+		.content-section {
+			display: none;
+			opacity: 0;
+			transform: translateY(20px);
+			transition: all 0.6s ease-out;
+		}
+		.content-section.active {
+			display: block;
+			opacity: 1;
+			transform: translateY(0);
+		}
+
+		/* Active nav link styling */
+		.nav-link.active a {
+			color: var(--color-bright-green);
+		}
+		.nav-link a[aria-current="page"] {
+			font-weight: 600;
+		}
+
+		/* Ensure icon containers always show something */
+		.w-8, .w-10, .w-12, .w-16 {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+	</style>
+
+	<style>
+		/* Ensure animated elements inside active sections are visible */
+		.content-section.active .scroll-fade-in,
+		.content-section.active .scroll-image,
+		.content-section.active .morph-image,
+		.content-section.active .slide-reveal {
+			opacity: 1 !important;
+			transform: none !important;
+			visibility: visible !important;
+		}
+
+		/* Make sure images inside active sections render */
+		.content-section.active img {
+			opacity: 1 !important;
+			visibility: visible !important;
+		}
+	</style>
+
+{% endblock %}

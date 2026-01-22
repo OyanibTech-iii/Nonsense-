@@ -1,0 +1,54 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+	<div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+		<div class="flex items-center justify-between">
+			<div>
+				<p class="text-sm font-medium text-light-gray mb-1">My Products</p>
+				<p class="text-3xl font-bold text-dark-forest-green">{{ stats.ownedProducts ?? 0 }}</p>
+				<p class="text-sm text-light-gray">Owned records</p>
+			</div>
+			<div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+				<ion-icon name="pricetags-outline" class="text-2xl text-bright-green"></ion-icon>
+			</div>
+		</div>
+	</div>
+
+	<div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+		<div class="flex items-center justify-between">
+			<div>
+				<p class="text-sm font-medium text-light-gray mb-1">All Products</p>
+				<p class="text-3xl font-bold text-dark-forest-green">{{ stats.totalProducts ?? 0 }}</p>
+				<p class="text-sm text-light-gray">Read-only catalog</p>
+			</div>
+			<div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+				<ion-icon name="grid-outline" class="text-2xl text-primary-700"></ion-icon>
+			</div>
+		</div>
+	</div>
+
+	<div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+		<div class="flex items-center justify-between">
+			<div>
+				<p class="text-sm font-medium text-light-gray mb-1">Profile</p>
+				<p class="text-l font-bold text-dark-forest-green">Up to date</p>
+				<p class="text-sm text-light-gray">Manage details</p>
+			</div>
+			<div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+				<ion-icon name="person-outline" class="text-2xl text-forest-600"></ion-icon>
+			</div>
+		</div>
+	</div>
+
+	<div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+		<div class="flex items-center justify-between">
+			<div>
+				<p class="text-sm font-medium text-light-gray mb-1">Role</p>
+				<p class="texT-l font-bold text-dark-forest-green">{{ isStaff ? 'Staff' : 'User' }}</p>
+				<p class="text-sm text-light-gray">{{ isStaff ? 'Can edit own records' : 'Read-only on products' }}</p>
+			</div>
+			<div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center">
+				<ion-icon name="{{ isStaff ? 'shield-checkmark-outline' : 'eye-outline' }}" class="text-2xl text-primary-700"></ion-icon>
+			</div>
+		</div>
+	</div>
+</div>
+

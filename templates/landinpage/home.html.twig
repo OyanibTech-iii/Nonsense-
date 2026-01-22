@@ -1,0 +1,405 @@
+
+     <section class="max-w-7xl mx-auto px-4 py-12">
+		<div
+			class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+			<!-- Left Column - Text Content -->
+			<div class="space-y-6">
+				<h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-4xl font-bold leading-tight scroll-fade-in">
+					<span class="text-dark-forest-green">Cultivate
+					</span>
+					<span class="text-bright-green">Thriving</span>
+					<br>
+					<span class="text-bright-green">Gardens
+					</span>
+					<span class="text-dark-forest-green">with Expert</span>
+					<br>
+					<span class="text-dark-forest-green">Guidance</span>
+				</h1>
+
+				<p class="text-sm sm:text-base text-light-gray leading-relaxed max-w-lg scroll-fade-in">
+					Transform your space into a productive paradise. Learn essential growing techniques like grafting, air layering, and budding while getting premium seedlings and fresh fruits. Perfect for beginners and experienced growers alike.
+				</p>
+
+                <a href="#growing-techniques" role="button"
+                   class="inline-flex items-center gap-2 sm:gap-3 bg-transparent border-2 border-bright-green text-bright-green px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium text-sm sm:text-base
+                            transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-bright-green hover:text-background group scroll-fade-in whitespace-nowrap">
+                    <span class="transition-colors duration-300">Learn Our Methods</span>
+                    <span class="transform group-hover:translate-x-2 transition-transform duration-300">→</span>
+                </a>
+
+
+				<!-- Stats -->
+				<div class="flex flex-wrap gap-4 sm:gap-8 md:gap-12 pt-8">
+					<div class="scroll-fade-in morph-image">
+						<div class="text-2xl sm:text-3xl font-bold text-bright-green pulse-stat">500+</div>
+						<div class="text-xs sm:text-sm text-gray-600 scroll-fade-in">Gardens Transformed</div>
+					</div>
+					<div class="scroll-fade-in morph-image">
+						<div class="text-2xl sm:text-3xl font-bold text-bright-green pulse-stat">15+</div>
+						<div class="text-xs sm:text-sm text-gray-600 scroll-fade-in">Growing Techniques</div>
+					</div>
+					<div class="scroll-fade-in morph-image">
+						<div class="text-2xl sm:text-3xl font-bold text-bright-green pulse-stat">98%</div>
+						<div class="text-xs sm:text-sm text-gray-600 scroll-fade-in">Success Rate</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Right Column - Image -->
+			<div class="relative">
+				<div class="rounded-2xl overflow-hidden image-hover-effect floating-image">
+					<img src="{{ asset('banners/banner1.png') }}" alt="Banner" class="parallax-image scroll-image morph-image"/>
+
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <!-- Video Hero Section -->
+    <div class="relative bg-gradient-to-br from-green-50 to-white overflow-hidden" style="height: 800px;">
+        <!-- Video Background -->
+        <div class="absolute inset-0 w-full h-full">
+            <video
+                class="w-full h-full object-cover"
+                autoPlay
+                loop
+                muted
+                playsInline
+                poster="https://images.unsplash.com/photo-1589313331637-fa8ceb1fac0d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXJ2ZXN0aW5nJTIwY3JvcHMlMjBmYXJtfGVufDF8fHx8MTc2NTE4MzU4MXww&ixlib=rb-4.1.0&q=80&w=1080"
+            >
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4" />
+            </video>
+            <!-- Green Overlay -->
+            <div class="absolute inset-0" style="background-color: rgba(34, 197, 94, 0.5);"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10">
+        </div>
+    </div>
+
+    <!-- Scroll Animation Section 1 - About Our Mission -->
+    <section class="scroll-section py-20 bg-gradient-to-br from-green-50 to-gray-50">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="scroll-content">
+                    <h2 class="text-4xl font-bold text-dark-forest-green mb-6 scroll-fade-in">
+                        Our Mission
+                    </h2>
+                    <p class="text-lg text-light-gray leading-relaxed mb-6 scroll-fade-in">
+                        We believe that everyone deserves access to fresh, healthy produce. Our mission is to 
+                        empower individuals and communities to grow their own food sustainably, creating a 
+                        greener future for generations to come.
+                    </p>
+                    <div class="flex flex-wrap gap-4 scroll-fade-in">
+                        <div class="flex items-center gap-3 text-bright-green">
+                            <span class="font-medium">✓ Sustainable Growing</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-bright-green">
+                            <span class="font-medium">✓ Expert Guidance</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-bright-green">
+                            <span class="font-medium">✓ Community Support</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="scroll-image-container">
+                    <img src="{{ asset('me/myimage.png') }}" 
+                         alt="Our Mission" 
+                         class="scroll-image morph-image w-full h-full object-contain rounded-2xl image-hover-effect">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Growing Techniques Section (target for Learn Our Methods) -->
+    <section id="growing-techniques" class="py-20 bg-white animate-fade-in">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-dark-forest-green mb-6 text-reveal revealed">Growing Techniques We Teach</h2>
+                <p class="text-lg text-light-gray text-reveal revealed">Master these essential techniques for successful gardening.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6 rounded-xl bg-green-50">
+                    <div class="w-26 h-26 bg-primary-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <img src="{{ asset('services/grafting.png') }}" alt="Grafting" class="h-full w-full object-cover object-center rounded-xl">
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark-forest-green mb-3">Grafting</h3>
+                    <p class="text-light-gray text-reveal revealed">Learn the art of grafting to combine the best qualities of different plants and improve fruit quality.</p>
+                </div>
+
+                <div class="text-center p-6 rounded-xl bg-green-50">
+                    <div class="w-26 h-26 bg-primary-200 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <img src="{{ asset('services/air layering.png') }}" alt="Air Layering" class="h-full w-full object-cover object-center rounded-xl">
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark-forest-green mb-3">Air Layering</h3>
+                    <p class="text-light-gray text-reveal revealed">Master air layering techniques to propagate plants while they're still attached to the parent plant.</p>
+                </div>
+
+                <div class="text-center p-6 rounded-xl bg-green-50">
+                    <div class="w-26 h-26 bg-forest-50 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <img src="{{ asset('services/budding.png') }}" alt="Budding" class="h-full w-full object-cover object-center rounded-xl">
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark-forest-green mb-3">Budding</h3>
+                    <p class="text-light-gray text-reveal revealed">Learn budding techniques for precise plant propagation and creating new varieties.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scroll Animation Section 2 - Our Impact -->
+    <section class="scroll-section py-20 bg-white">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="scroll-image-container order-2 lg:order-1">
+                    <img src="{{ asset('me/mesideview.png') }}" 
+                         alt="Our Impact" 
+                         class="scroll-image slide-reveal w-full h-full object-contain rounded-2xl image-hover-effect">
+                </div>
+                <div class="scroll-content order-1 lg:order-2">
+                    <h2 class="text-4xl font-bold text-dark-forest-green mb-6 scroll-fade-in">
+                        Making a Difference
+                    </h2>
+                    <p class="text-lg text-light-gray leading-relaxed mb-6 scroll-fade-in">
+                        Through our innovative growing techniques and community programs, we've helped 
+                        transform thousands of spaces into productive gardens. See the real impact we're 
+                        making in communities worldwide.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 scroll-fade-in">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">2,500+</div>
+                            <div class="text-sm text-light-gray">Gardens Created</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">15,000+</div>
+                            <div class="text-sm text-light-gray">Lives Impacted</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">50+</div>
+                            <div class="text-sm text-light-gray">Communities</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">95%</div>
+                            <div class="text-sm text-light-gray">Success Rate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Scroll Animation JavaScript -->
+    <script>
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                        
+                        // Add staggered delay for multiple elements
+                        const siblings = Array.from(entry.target.parentNode.children);
+                        const index = siblings.indexOf(entry.target);
+                        entry.target.style.transitionDelay = `${index * 0.1}s`;
+                    } else {
+                        entry.target.classList.remove('animate-fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all scroll elements
+            document.querySelectorAll('.scroll-fade-in, .scroll-image, .morph-image, .slide-reveal').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Enhanced Parallax scrolling effect
+        function initParallaxScrolling() {
+            const parallaxElements = document.querySelectorAll('.parallax-image');
+            
+            function updateParallax() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.3;
+                const scale = 1 + scrolled * 0.0002;
+                
+                parallaxElements.forEach((element, index) => {
+                    const speed = 0.3 + (index * 0.1);
+                    const yPos = scrolled * -speed;
+                    const rotation = scrolled * 0.05;
+                    element.style.transform = `translateY(${yPos}px) scale(${scale}) rotate(${rotation}deg)`;
+                });
+            }
+
+            window.addEventListener('scroll', updateParallax);
+        }
+
+        // Enhanced floating animation controller
+        function initFloatingAnimations() {
+            const floatingElements = document.querySelectorAll('.floating-image');
+            
+            floatingElements.forEach((element, index) => {
+                // Add staggered delay to floating animations
+                element.style.animationDelay = `${index * 0.8}s`;
+                element.style.animationDuration = `${4 + index * 0.5}s`;
+                
+                // Add custom floating effect
+                element.addEventListener('mouseenter', function() {
+                    this.style.animationPlayState = 'paused';
+                    this.style.transform = 'translateY(-15px) rotate(2deg) scale(1.02)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.animationPlayState = 'running';
+                });
+            });
+        }
+
+        // Enhanced hover effects with advanced animations
+        function initHoverEffects() {
+            const hoverElements = document.querySelectorAll('.image-hover-effect');
+            
+            hoverElements.forEach((element, index) => {
+                element.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-15px) scale(1.05) rotate(1deg)';
+                    this.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    this.style.boxShadow = '0 20px 40px rgba(3, 166, 74, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1) rotate(0deg)';
+                    this.style.transition = 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    this.style.boxShadow = '0 4px 16px rgba(3, 166, 74, 0.07), 0 2px 8px rgba(0, 0, 0, 0.03)';
+                });
+            });
+        }
+
+        // Enhanced stats animation with counting effect
+        function initStatsAnimation() {
+            const stats = document.querySelectorAll('.pulse-stat');
+            
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'pulse 2s ease-in-out infinite';
+                        
+                        // Add counting animation
+                        const finalValue = entry.target.textContent;
+                        const numericValue = parseInt(finalValue.replace(/\D/g, ''));
+                        if (numericValue && numericValue > 0) {
+                            animateCounter(entry.target, 0, numericValue, 2000, finalValue);
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            stats.forEach(stat => statsObserver.observe(stat));
+        }
+        
+        // Counter animation function
+        function animateCounter(element, start, end, duration, originalText) {
+            const startTime = performance.now();
+            const suffix = originalText.replace(/\d/g, '');
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(start + (end - start) * progress);
+                
+                element.textContent = current + suffix;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Advanced text reveal animation
+        function initTextRevealAnimations() {
+            const textElements = document.querySelectorAll('h1, h2, p');
+            
+            const textObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('text-reveal');
+                        setTimeout(() => {
+                            entry.target.classList.add('revealed');
+                        }, 100);
+                    }
+                });
+            }, { threshold: 0.3 });
+            
+            textElements.forEach(el => textObserver.observe(el));
+        }
+        
+        // Advanced glow effects
+        function initGlowEffects() {
+            const glowElements = document.querySelectorAll('.image-hover-effect');
+            
+            glowElements.forEach(element => {
+                element.classList.add('glow-effect');
+                
+                element.addEventListener('mouseenter', function() {
+                    this.style.boxShadow = '0 0 30px rgba(3, 166, 74, 0.3), 0 0 60px rgba(3, 166, 74, 0.1)';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    this.style.boxShadow = '';
+                });
+            });
+        }
+        
+        // Performance optimized scroll handler
+        function initOptimizedScrollAnimations() {
+            let ticking = false;
+            
+            function updateScrollAnimations() {
+                const scrolled = window.pageYOffset;
+                const windowHeight = window.innerHeight;
+                
+                // Update parallax elements
+                document.querySelectorAll('.parallax-image').forEach((element, index) => {
+                    const rect = element.getBoundingClientRect();
+                    const speed = 0.3 + (index * 0.1);
+                    const yPos = scrolled * -speed;
+                    const rotation = scrolled * 0.05;
+                    const scale = 1 + scrolled * 0.0002;
+                    
+                    element.style.transform = `translateY(${yPos}px) scale(${scale}) rotate(${rotation}deg)`;
+                });
+                
+                ticking = false;
+            }
+            
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateScrollAnimations);
+                    ticking = true;
+                }
+            }
+            
+            window.addEventListener('scroll', requestTick, { passive: true });
+        }
+
+        // Initialize all animations when DOM is loaded and enable smooth in-page scrolling
+        document.addEventListener('DOMContentLoaded', () => {
+            document.documentElement.style.scrollBehavior = 'smooth';
+            initScrollAnimations();
+            initParallaxScrolling();
+            initFloatingAnimations();
+            initHoverEffects();
+            initStatsAnimation();
+            initTextRevealAnimations();
+            initGlowEffects();
+            initOptimizedScrollAnimations();
+        });
+
+        // Performance optimization is now handled in initOptimizedScrollAnimations()
+    </script>
+{% include 'footer/index.html.twig' %}

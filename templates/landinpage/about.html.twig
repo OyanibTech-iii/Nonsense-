@@ -1,0 +1,275 @@
+{% set testimonials = [
+    {'name':'Ricardo Lopez','role':'Farm Owner','company':'Lopez Organic Farms','content':'Growfico has transformed how we manage our operations. The platform\'s analytics have helped us increase productivity by 40%.','image':'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBtYW58ZW58MXx8fHwxNzY1MDAwMDkyfDA&ixlib=rb-4.1.0&q=80&w=1080'},
+    {'name':'Sofia Chen','role':'Supply Chain Manager','company':'GreenHarvest Co.','content':'The inventory management system is intuitive and powerful. We\'ve reduced waste by 30% since implementing Growfico.','image':'https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjB3b21hbnxlbnwxfHx8fDE3NjUwMDAwOTJ8MA&ixlib=rb-4.1.0&q=80&w=1080'},
+    {'name':'Michael Torres','role':'CEO','company':'Agri Solutions Inc.','content':'Excellent platform with outstanding support. Growfico has become an essential tool for our entire organization.','image':'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHw0fHxwcm9mZXNzaW9uYWwlMjBtYW58ZW58MXx8fHwxNzY1MDAwMDkyfDA&ixlib=rb-4.1.0&q=80&w=1080'}
+] %}
+
+<main class="main">
+    <!-- Hero Section -->
+    <section class="hero bg-gradient-to-br from-green-50 to-gray-50 py-20">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="hero-content">
+                    <h1 class="text-5xl font-bold text-dark-forest-green mb-6">
+                        About <span class="text-bright-green">Growfico</span>
+                    </h1>
+                    <p class="text-xl text-light-gray leading-relaxed mb-8">
+                        We're passionate about cultivating green futures through innovative growing techniques, 
+                        expert guidance, and community support. Our mission is to empower everyone to grow 
+                        their own fresh, healthy produce sustainably.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-3 text-bright-green">
+                            <span class="font-medium">✓ Sustainable Growing</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-bright-green">
+                            <span class="font-medium">✓ Community Focused</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-bright-green">
+                            <span class="font-medium">✓ Expert Education</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image-container">
+                    <img src="{{ asset('me/college.png') }}" 
+                         alt="Growfico Founder" 
+                         class="w-full h-auto">
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="py-20 bg-white">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-dark-forest-green mb-6">Our Story</h2>
+                <p class="text-lg text-light-gray max-w-3xl mx-auto">
+                    Founded with a vision to make sustainable growing accessible to everyone, 
+                    Growfico has been transforming spaces and lives through innovative gardening techniques.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="text-center p-6 rounded-xl bg-green-50 animate-on-scroll">
+                    <div class="w-16 h-16 bg-primary-200 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <ion-icon name="bulb-outline" class="text-4xl text-primary-600"></ion-icon>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark-forest-green mb-3">Innovation</h3>
+                    <p class="text-light-gray">We develop cutting-edge growing techniques like grafting, air layering, and budding to maximize your garden's potential.</p>
+                </div>
+
+                <div class="text-center p-6 rounded-xl bg-green-50 animate-on-scroll">
+                    <div class="w-16 h-16 bg-primary-200 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <ion-icon name="heart-outline" class="text-4xl text-primary-700"></ion-icon>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark-forest-green mb-3">Passion</h3>
+                    <p class="text-light-gray">Our love for gardening and sustainable living drives everything we do, from education to community support.</p>
+                </div>
+
+                <div class="text-center p-6 rounded-xl bg-green-50 animate-on-scroll">
+                    <div class="w-16 h-16 bg-primary-200 rounded-xl flex items-center justify-center mx-auto mb-4">
+                        <ion-icon name="earth-outline" class="text-4xl text-primary-600"></ion-icon>
+                    </div>
+                    <h3 class="text-xl font-semibold text-dark-forest-green mb-3">Impact</h3>
+                    <p class="text-light-gray">We're committed to creating positive environmental and social impact through sustainable growing practices.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Values Section -->
+    <section class="py-20 bg-gradient-to-br from-green-50 to-gray-50">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-dark-forest-green mb-6">Our Mission & Values</h2>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-xl text-bright-green font-bold">✓</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-dark-forest-green mb-2">Sustainable Growing</h3>
+                                <p class="text-light-gray">We promote environmentally friendly growing methods that preserve our planet for future generations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-xl text-bright-green font-bold">✓</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-dark-forest-green mb-2">Education First</h3>
+                                <p class="text-light-gray">We believe knowledge is the foundation of successful growing, providing comprehensive education for all skill levels.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-xl text-bright-green font-bold">✓</span>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-dark-forest-green mb-2">Community Support</h3>
+                                <p class="text-light-gray">We foster a supportive community where growers can share knowledge, experiences, and success stories.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white p-8 rounded-2xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-dark-forest-green mb-6 text-center">Our Impact</h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">500+</div>
+                            <div class="text-sm text-light-gray">Gardens Transformed</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">15+</div>
+                            <div class="text-sm text-light-gray">Growing Techniques</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">95%</div>
+                            <div class="text-sm text-light-gray">Success Rate</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-bright-green mb-2">1000+</div>
+                            <div class="text-sm text-light-gray">Happy Customers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet Our Team -->
+    <section class="bg-green-50 py-20">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-dark-forest-green mb-4">Meet Our Team</h2>
+                <p class="text-xl text-light-gray max-w-2xl mx-auto">
+                    The passionate people behind Growfico
+                </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="aspect-square overflow-hidden bg-gray-100">
+                        <img src="{{ asset('team/collede.png') }}" alt="Maria Santos" class="w-full h-full object-cover" data-fallback="{{ asset('images/avatar-fallback.png') }}">
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-dark-forest-green mb-1">Juan Pedro</h3>
+                        <p class="text-light-gray">Chief Executive Officer</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="aspect-square overflow-hidden bg-gray-100">
+                        <img src="{{ asset('team/dev.png') }}" alt="Juan Dela Cruz" class="w-full h-full object-cover" data-fallback="{{ asset('images/avatar-fallback.png') }}">
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-dark-forest-green mb-1">Juan Dela Cruz</h3>
+                        <p class="text-light-gray">Chief Technology Officer</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="aspect-square overflow-hidden bg-gray-100">
+                        <img src="{{ asset('team/doc.png') }}" alt="Ana Rodriguez" class="w-full h-full object-cover" data-fallback="{{ asset('images/avatar-fallback.png') }}">
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-dark-forest-green mb-1">Papa P</h3>
+                        <p class="text-light-gray">Head of Operations</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
+                    <div class="aspect-square overflow-hidden bg-gray-100">
+                        <img src="{{ asset('team/profile.png') }}" alt="Carlos Mendoza" class="w-full h-full object-cover" data-fallback="{{ asset('images/avatar-fallback.png') }}">
+                    </div>
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-semibold text-dark-forest-green mb-1">Pein Uzumaki</h3>
+                        <p class="text-light-gray">Marketing Director</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-20 bg-white">
+        <div class="container max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-dark-forest-green mb-4">What Our Clients Say</h2>
+                <p class="text-xl text-light-gray max-w-2xl mx-auto">
+                    Real stories from businesses that trust Growfico
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for t in testimonials %}
+                    <div class="bg-white border border-gray-200 rounded-xl p-6">
+                        <p class="text-light-gray mb-6 italic">"{{ t.content }}"</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+                                <img src="{{ t.image }}" alt="{{ t.name }}" class="w-full h-full object-cover" data-fallback="{{ asset('images/avatar-fallback.png') }}">
+                            </div>
+                            <div>
+                                <div class="font-semibold text-dark-forest-green">{{ t.name }}</div>
+                                <div class="text-sm text-light-gray">{{ t.role }}</div>
+                                <div class="text-sm text-bright-green">{{ t.company }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Scroll Animation JavaScript -->
+<script>
+    function initScrollAnimations() {
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all scroll elements
+        document.querySelectorAll('section, .hero-content, .hero-image-container, .animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', initScrollAnimations);
+</script>
+
+<style>
+    .animate-fade-in {
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .hero-image-container img {
+        max-height: 500px;
+        object-fit: cover;
+    }
+</style>
+
+{% include 'footer/index.html.twig' %}

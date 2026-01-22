@@ -1,0 +1,26 @@
+<!-- Reusable loading overlay partial (match delete/logout modal style) -->
+<style>
+    @keyframes gf-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+<div id="loading-overlay" class="fixed inset-0 bg-white bg-opacity-50 backdrop-blur-sm overflow-y-auto h-full w-full hidden z-50" style="backdrop-filter: blur(6px);">
+    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 bg-white">
+        <div id="loading-modal" class="transform transition-all duration-300 ease-out opacity-0 scale-95 bg-transparent">
+            <div class="px-4 py-4 text-center">
+                <div class="relative mx-auto mb-3 w-32 h-32">
+                    <div class="absolute inset-0 rounded-full bg-white/95 shadow flex items-center justify-center overflow-hidden" style="backdrop-filter: blur(4px);">
+                        <img src="{{ asset('logos/Icon- Brand.png') }}" alt="Growfico" class="w-16 h-16 object-contain" />
+                    </div>
+
+                    <!-- Larger spinner ring that wraps the logo -->
+                    <svg class="absolute inset-0 m-auto h-32 w-32" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" style="animation: gf-spin 1s linear infinite; color: #09b559;">
+                        <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="5" stroke-opacity="0.18" fill="none"></circle>
+                        <path d="M45 25a20 20 0 00-7-15" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"></path>
+                    </svg>
+                </div>
+
+                <h3 class="text-xl font-bold mb-1 text-primary-600">Signing you in…</h3>
+                <p class="opacity-90 text-sm sm:text-base text-dark-forest">We are validating your credentials. This may take a few seconds.</p>
+            </div>
+        </div>
+    </div>
+</div>

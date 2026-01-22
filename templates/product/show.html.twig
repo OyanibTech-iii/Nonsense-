@@ -1,0 +1,248 @@
+{% extends 'user_page/base_user.html.twig' %}
+
+{% block title %}{{ product.name }} - Growfico{% endblock %}
+
+{% block user_content %}
+<!-- Header Section -->
+<div class="bg-white shadow-sm border-b border-gray-200 rounded-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div>
+                {# <nav class="flex items-center space-x-2 text-sm text-light-gray mb-2">
+                    <a href="{{ path('app_product_index') }}" class="hover:text-bright-green transition-colors">Products</a>
+                    <ion-icon name="chevron-forward" class="w-4 h-4"></ion-icon>
+                    <span class="text-dark-forest-green">{{ product.name }}</span>
+                </nav> #}
+                <div class="flex items-center gap-3">
+                    <h1 class="text-heading font-bold text-dark-forest-green font-sans">{{ product.name }}</h1>
+                    {% if not is_granted('PRODUCT_EDIT', product) and is_granted('PRODUCT_VIEW', product) %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <ion-icon name="lock-closed-outline" class="w-3 h-3 mr-1"></ion-icon>
+                            Read-only
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mt-4 sm:mt-0 flex space-x-3">
+                {% if is_granted('PRODUCT_EDIT', product) %}
+                    <a href="{{ path('app_product_edit', {'id': product.id}) }}" 
+                       class="inline-flex items-center px-4 py-2 bg-bright-green text-white font-semibold rounded-lg hover:bg-green-600 transition-colors duration-200 shadow-md hover:shadow-lg">
+                        <ion-icon name="create-outline" class="w-4 h-4 mr-2"></ion-icon>
+                        Edit Product
+                    </a>
+                {% endif %}
+                {# <a href="{{ path('app_product_index') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-100 text-dark-forest-green font-semibold rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                    <ion-icon name="arrow-back-outline" class="w-4 h-4 mr-2"></ion-icon>
+                    Back to List
+                </a> #}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Details -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Product Image -->
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+                {% set imgPath = product.getImagePath() %}
+                {% if imgPath %}
+                    <div class="h-96 w-full overflow-hidden">
+                        <img src="{{ imgPath starts with('http') ? imgPath : asset(imgPath) }}"
+                             alt="{{ product.name }}"
+                             class="object-cover w-full h-96"
+                             onerror="this.style.display='none'; this.parentNode.querySelector('.fallback-icon').style.display='flex';" />
+                        <div class="fallback-icon hidden h-96 w-full items-center justify-center bg-gradient-to-br from-bright-green/10 to-dark-forest-green/10">
+                            <ion-icon name="leaf-outline" class="w-32 h-32 text-bright-green"></ion-icon>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="h-96 bg-gradient-to-br from-bright-green/10 to-dark-forest-green/10 flex items-center justify-center">
+                        <ion-icon name="leaf-outline" class="w-32 h-32 text-bright-green"></ion-icon>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Product Information -->
+            <div class="space-y-6">
+                <!-- Product Status -->
+                <div class="flex items-center justify-between">
+                    <div class="text-heading font-bold text-dark-forest-green">
+                        ₱{{ product.price }}
+                    </div>
+                    {% if product.isAvailable %}
+                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            <ion-icon name="checkmark-circle" class="w-4 h-4 mr-2"></ion-icon>
+                            In Stock
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                            <ion-icon name="close-circle" class="w-4 h-4 mr-2"></ion-icon>
+                            Out of Stock
+                        </span>
+                    {% endif %}
+                </div>
+
+                <!-- Product Description -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-heading font-semibold text-dark-forest-green mb-3">Description</h3>
+                    <p class="text-light-gray text-base leading-relaxed">{{ product.description }}</p>
+                </div>
+
+                <!-- Product Details -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-heading font-semibold text-dark-forest-green mb-4">Product Details</h3>
+                    <dl class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Product ID</dt>
+                            <dd class="text-base text-dark-forest-green font-mono">#{{ product.id }}</dd>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Availability</dt>
+                            <dd class="text-base">
+                                {% if product.isAvailable %}
+                                    <span class="text-green-600 font-medium">Available for purchase</span>
+                                {% else %}
+                                    <span class="text-red-600 font-medium">Currently unavailable</span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        {% if product.owner %}
+                        <div class="flex justify-between items-center py-2">
+                            <dt class="text-base font-medium text-light-gray">Created By</dt>
+                            <dd class="text-base text-dark-forest-green font-medium">
+                                {% if is_granted('PRODUCT_EDIT', product) %}
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        <ion-icon name="person-outline" class="w-3 h-3 mr-1"></ion-icon>
+                                        {{ product.owner.getFirstName() }} {{ product.owner.getLastName() }} (You)
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        <ion-icon name="person-outline" class="w-3 h-3 mr-1"></ion-icon>
+                                        {{ product.owner.getFirstName() }} {{ product.owner.getLastName() }}
+                                    </span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        {% endif %}
+                    </dl>
+                </div>
+
+                <!-- Stock Information -->
+                {% if product.stocks|length > 0 %}
+                {% set firstStock = product.stocks|first %}
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-heading font-semibold text-dark-forest-green mb-4 flex items-center gap-2">
+                        <ion-icon name="cube-outline" class="text-xl"></ion-icon>
+                        Stock Information
+                    </h3>
+                    <dl class="space-y-4">
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Current Quantity</dt>
+                            <dd class="text-base text-dark-forest-green font-semibold">{{ product.getCurrentStockQuantity() }}</dd>
+                        </div>
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Stock Status</dt>
+                            <dd class="text-base">
+                                {% set status = product.getStockStatus() %}
+                                {% if status == 'Out of stock' %}
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        <ion-icon name="close-circle" class="w-3 h-3 mr-1"></ion-icon>
+                                        {{ status }}
+                                    </span>
+                                {% elseif status == 'Low stock' %}
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <ion-icon name="warning" class="w-3 h-3 mr-1"></ion-icon>
+                                        {{ status }}
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <ion-icon name="checkmark-circle" class="w-3 h-3 mr-1"></ion-icon>
+                                        {{ status }}
+                                    </span>
+                                {% endif %}
+                            </dd>
+                        </div>
+                        {% if firstStock.stockType %}
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Stock Type</dt>
+                            <dd class="text-base text-dark-forest-green capitalize">{{ firstStock.stockType }}</dd>
+                        </div>
+                        {% endif %}
+                        {% if firstStock.minimumQuantity %}
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Minimum Quantity</dt>
+                            <dd class="text-base text-dark-forest-green">{{ firstStock.minimumQuantity }}</dd>
+                        </div>
+                        {% endif %}
+                        {% if firstStock.maximumQuantity %}
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Maximum Quantity</dt>
+                            <dd class="text-base text-dark-forest-green">{{ firstStock.maximumQuantity }}</dd>
+                        </div>
+                        {% endif %}
+                        {% if firstStock.location %}
+                        <div class="flex justify-between items-center py-2 border-b border-gray-100">
+                            <dt class="text-base font-medium text-light-gray">Storage Location</dt>
+                            <dd class="text-base text-dark-forest-green">{{ firstStock.location }}</dd>
+                        </div>
+                        {% endif %}
+                        <div class="flex justify-between items-center py-2">
+                            <dt class="text-base font-medium text-light-gray">Last Updated</dt>
+                            <dd class="text-base text-dark-forest-green">
+                                {% if firstStock.updatedAt %}
+                                    {{ firstStock.updatedAt|date('M d, Y H:i') }}
+                                {% else %}
+                                    Not updated
+                                {% endif %}
+                            </dd>
+                        </div>
+                    </dl>
+                    
+                    <!-- Stock Management Actions -->
+                    {% if is_granted('STOCK_EDIT', firstStock) %}
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <a href="{{ path('app_stock_edit', {'id': firstStock.id}) }}" 
+                               class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-800 font-semibold rounded-lg hover:bg-blue-200 transition-colors duration-200">
+                                <ion-icon name="settings-outline" class="w-4 h-4 mr-2"></ion-icon>
+                                Manage Stock
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+                {% else %}
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-heading font-semibold text-dark-forest-green mb-4 flex items-center gap-2">
+                        <ion-icon name="cube-outline" class="text-xl"></ion-icon>
+                        Stock Information
+                    </h3>
+                    <div class="text-center py-8">
+                        <ion-icon name="cube-outline" class="w-16 h-16 text-gray-300 mx-auto mb-4"></ion-icon>
+                        <p class="text-light-gray mb-4">No stock information available for this product.</p>
+                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" 
+                           class="inline-flex items-center px-4 py-2 bg-bright-green text-white font-semibold rounded-lg hover:bg-green-600 transition-colors duration-200">
+                            <ion-icon name="add-outline" class="w-4 h-4 mr-2"></ion-icon>
+                            Add Stock Information
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Action Buttons -->
+                <div class="flex space-x-4 mt-2">
+                    {% if is_granted('PRODUCT_EDIT', product) %}
+                        <a href="{{ path('app_product_edit', {'id': product.id}) }}" 
+                           class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-bright-green text-white font-semibold rounded-lg hover:bg-green-600 transition-colors duration-200 shadow-md hover:shadow-lg">
+                            <ion-icon name="create-outline" class="w-5 h-5 mr-2"></ion-icon>
+                            Edit Product
+                        </a>
+                    {% endif %}
+                    <div class="flex-1">
+                        {{ include('product/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

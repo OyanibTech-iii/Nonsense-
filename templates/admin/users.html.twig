@@ -1,0 +1,803 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Admin Users | Growfico{% endblock %}
+
+{% block header_title %}
+<h2 class="text-xl font-semibold text-dark-forest-green">User Management</h2>
+<p class="text-sm text-light-gray">Monitor, add, and edit user accounts</p>
+{% endblock %}
+
+{% block admin_content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Users Management Section -->
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm">
+        <!-- Header with Actions -->
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-semibold text-dark-forest-green">Users Management</h3>
+                    <p class="text-sm text-light-gray">Manage user accounts and permissions</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Search -->
+                    <div class="relative">
+                        <input type="text" id="user-search" placeholder="Search users..."
+                            class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-bright-green focus:border-transparent w-64">
+                        <ion-icon name="search-outline"
+                            class="absolute left-3 top-2.5 text-gray-400 text-lg"></ion-icon>
+                    </div>
+                    <!-- Add User Button -->
+                    <button id="add-user-btn"
+                        class="inline-flex items-center px-4 py-2 bg-bright-green text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        <ion-icon name="add-outline" class="w-4 h-4 mr-2"></ion-icon>
+                        Add User
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table-body" class="bg-white divide-y divide-gray-200">
+                    {% for user in users %}
+                    <tr class="hover:bg-gray-50 user-row" data-user-id="{{ user.id }}"
+                        data-user-name="{{ user.getFullName() }}" data-user-email="{{ user.email }}"
+                        data-user-phone="{{ user.phone ?? 'No phone' }}"
+                        data-user-role="{% if 'ROLE_ADMIN' in user.roles %}Admin{% elseif 'ROLE_STAFF' in user.roles %}Staff{% else %}User{% endif %}"
+                        data-user-status="{{ user.isActive ? 'Active' : 'Inactive' }}">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                {% if user.getProfileImage() %}
+                                <img src="{{ asset(user.getProfileImage()) }}" alt="{{ user.getFullName() }}"
+                                    class="w-10 h-10 rounded-full object-cover border border-gray-200">
+                                {% else %}
+                                <div
+                                    class="w-10 h-10 bg-gradient-to-br from-bright-green to-primary-600 text-white flex items-center justify-center rounded-full font-semibold text-sm">
+                                    {{ user.firstName ? user.firstName|first|upper : user.email|first|upper }}
+                                </div>
+                                {% endif %}
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">{{ user.getFullName() }}</div>
+                                    <div class="text-sm text-gray-500">{{ user.phone ?? 'No phone' }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ user.email }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% set role_label = 'User' %}
+                            {% set role_class = 'bg-blue-100 text-blue-800' %}
+                            {% if 'ROLE_ADMIN' in user.roles %}
+                            {% set role_label = 'Admin' %}
+                            {% set role_class = 'bg-purple-100 text-purple-800' %}
+                            {% elseif 'ROLE_STAFF' in user.roles %}
+                            {% set role_label = 'Staff' %}
+                            {% set role_class = 'bg-green-100 text-green-800' %}
+                            {% endif %}
+                            <span
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ role_class }}">
+                                {{ role_label }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            {% if user.isActive %}
+                                                bg-green-100 text-green-800
+                                            {% else %}
+                                                bg-red-100 text-red-800
+                                            {% endif %}">
+                                {% if user.isActive %}
+                                Active
+                                {% else %}
+                                Inactive
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex items-center gap-2">
+                                <!-- View Button -->
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors duration-200 shadow-sm hover:shadow view-user-btn"
+                                    data-user-id="{{ user.id }}" title="View User">
+                                    <ion-icon name="eye-outline" class="w-4 h-4"></ion-icon>
+                                </button>
+
+                                <!-- Edit Button -->
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-1.5 bg-primary-50 text-bright-green rounded-lg hover:bg-primary-100 transition-colors duration-200 shadow-sm hover:shadow edit-user-btn"
+                                    data-user-id="{{ user.id }}" title="Edit User">
+                                    <ion-icon name="create-outline" class="w-4 h-4"></ion-icon>
+                                </button>
+
+                                <!-- Toggle Status Button -->
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-1.5 {% if user.isActive %}bg-orange-50 text-orange-600 hover:bg-orange-100{% else %}bg-green-50 text-green-600 hover:bg-green-100{% endif %} rounded-lg transition-colors duration-200 shadow-sm hover:shadow toggle-status-btn"
+                                    data-user-id="{{ user.id }}"
+                                    data-new-status="{{ user.isActive ? 'false' : 'true' }}"
+                                    data-user-role="{% if 'ROLE_ADMIN' in user.roles %}Admin{% else %}User{% endif %}"
+                                    title="{% if user.isActive %}Deactivate{% else %}Activate{% endif %} User">
+                                    <ion-icon
+                                        name="{% if user.isActive %}power-outline{% else %}checkmark-circle-outline{% endif %}"
+                                        class="w-4 h-4"></ion-icon>
+                                </button>
+
+                                <!-- Delete Button -->
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-200 shadow-sm hover:shadow delete-user-btn"
+                                    data-user-id="{{ user.id }}" title="Delete User">
+                                    <ion-icon name="trash-outline" class="w-4 h-4"></ion-icon>
+                                </button>
+                            </div>
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Empty State -->
+        {% if users is empty %}
+        <div class="text-center py-12">
+            <div class="mx-auto w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <ion-icon name="people-outline" class="w-8 h-8 text-light-gray"></ion-icon>
+            </div>
+            <h4 class="text-sm font-semibold text-dark-forest-green mb-2">No users found</h4>
+            <p class="text-xs text-light-gray mb-4 max-w-sm mx-auto">
+                Start by adding your first user to the system.
+            </p>
+            <button id="add-first-user-btn"
+                class="inline-flex items-center px-4 py-2 bg-bright-green text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors duration-200">
+                <ion-icon name="add-outline" class="w-4 h-4 mr-2"></ion-icon>
+                Add Your First User
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- Add/Edit User Modal -->
+<div id="user-modal" class="fixed inset-0 z-50 hidden backdrop-blur-md">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div id="user-modal-content" class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
+            <div class="px-6 py-4 bg-bright-green text-white">
+                <div class="flex items-center justify-between">
+                    <h3 id="modal-title" class="text-lg font-semibold">Add User</h3>
+                    <button id="close-modal" class="text-white/80 hover:text-white transition-colors duration-200">
+                        <ion-icon name="close-outline" class="w-6 h-6"></ion-icon>
+                    </button>
+                </div>
+            </div>
+
+            <form id="user-form" class="p-6">
+                <input type="hidden" id="user-id" name="id">
+                <input type="hidden" id="csrf-token" name="_token" value="{{ csrf_token('admin_users') }}">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="first-name" class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <input type="text" id="first-name" name="firstName" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bright-green focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="last-name" class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <input type="text" id="last-name" name="lastName" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bright-green focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="email" name="email" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bright-green focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone (Optional)</label>
+                        <input type="tel" id="phone" name="phone"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bright-green focus:border-transparent">
+                    </div>
+
+                    <div id="password-field">
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input type="password" id="password" name="password"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bright-green focus:border-transparent">
+                    </div>
+
+                    <div>
+                        <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                        <select id="role" name="role" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-bright-green focus:border-transparent">
+                            <option value="ROLE_USER">User</option>
+                            <option value="ROLE_STAFF">Staff</option>
+                            <option value="ROLE_ADMIN">Admin</option>
+                        </select>
+                    </div>
+
+                    <div class="col-span-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" id="is-active" name="isActive" checked
+                                class="rounded border-gray-300 text-bright-green focus:ring-bright-green">
+                            <span class="ml-2 text-sm text-gray-700">Active User</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+                    <button type="button" id="cancel-btn"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit" id="save-btn"
+                        class="px-4 py-2 text-sm font-medium text-white bg-bright-green rounded-lg hover:bg-green-600 transition-colors duration-200">
+                        Save User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- View User Modal -->
+<div id="user-view-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+    <div class="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-md w-full overflow-hidden">
+            <div class="px-6 py-4 bg-bright-green text-white flex items-center justify-between">
+                <h3 class="text-lg font-semibold">User Details</h3>
+                <button id="user-view-close" class="text-white/90 hover:text-white">
+                    <ion-icon name="close-outline" class="w-6 h-6"></ion-icon>
+                </button>
+            </div>
+            <div class="p-6 space-y-3">
+                <div>
+                    <p class="text-xs text-light-gray">Name</p>
+                    <p id="uv-name" class="text-sm font-medium text-dark-forest-green"></p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-light-gray">Email</p>
+                        <p id="uv-email" class="text-sm font-medium text-dark-forest-green break-all"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-light-gray">Phone</p>
+                        <p id="uv-phone" class="text-sm font-medium text-dark-forest-green"></p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs text-light-gray">Role</p>
+                        <p id="uv-role" class="text-sm font-medium text-dark-forest-green"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-light-gray">Status</p>
+                        <p id="uv-status" class="text-sm font-medium"></p>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-4 border-t border-gray-100">
+                    <button id="user-view-close-2"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Modal open animation */
+    @keyframes modalIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px) scale(0.98);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .modal-animate-in {
+        animation: modalIn 180ms ease-out;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // User management functionality
+        const userModal = document.getElementById('user-modal');
+        const userViewModal = document.getElementById('user-view-modal');
+        const userForm = document.getElementById('user-form');
+        const modalTitle = document.getElementById('modal-title');
+        const userIdField = document.getElementById('user-id');
+        const passwordField = document.getElementById('password-field');
+        const closeModal = document.getElementById('close-modal');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const addUserBtn = document.getElementById('add-user-btn');
+        const addFirstUserBtn = document.getElementById('add-first-user-btn');
+
+        // Open modal for adding user
+        function openAddUserModal() {
+            modalTitle.textContent = 'Add User';
+            userForm.reset();
+            userIdField.value = '';
+            passwordField.style.display = 'block';
+            document.getElementById('password').required = true;
+            userModal.classList.remove('hidden');
+            const mc = document.getElementById('user-modal-content');
+            mc.classList.remove('modal-animate-in');
+            void mc.offsetWidth; // reflow to restart animation
+            mc.classList.add('modal-animate-in');
+        }
+
+        // Open modal for editing user
+        function openEditUserModal(userId) {
+            // This would typically fetch user data via AJAX
+            // For now, we'll show the modal with placeholder data
+            modalTitle.textContent = 'Edit User';
+            userIdField.value = userId;
+            passwordField.style.display = 'none';
+            document.getElementById('password').required = false;
+            userModal.classList.remove('hidden');
+        }
+
+        // Close modal
+        function closeUserModal() {
+            userModal.classList.add('hidden');
+            userForm.reset();
+        }
+
+        // Event listeners
+        addUserBtn?.addEventListener('click', openAddUserModal);
+        addFirstUserBtn?.addEventListener('click', openAddUserModal);
+        closeModal.addEventListener('click', closeUserModal);
+        cancelBtn.addEventListener('click', closeUserModal);
+
+        // Close modal when clicking outside
+        userModal.addEventListener('click', function (e) {
+            if (e.target === userModal) {
+                closeUserModal();
+            }
+        });
+
+        // Form submission
+        userForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(userForm);
+            const userData = Object.fromEntries(formData);
+            const isEdit = !!userData.id;
+
+            // Show loading state
+            Swal.fire({
+                title: isEdit ? 'Updating user...' : 'Creating user...',
+                text: 'Please wait',
+                imageUrl: '/me/asking.png',
+                imageWidth: 50,
+                imageHeight: 50,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Prepare data for API
+            const apiData = {
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                email: userData.email,
+                phone: userData.phone || null,
+                role: userData.role,
+                isActive: userData.isActive === 'on' || userData.isActive === true
+            };
+
+            // Add password only if provided
+            if (userData.password) {
+                apiData.password = userData.password;
+            }
+
+            const url = isEdit
+                ? `/admin/users/${userData.id}/update`
+                : '/admin/users/create';
+            const method = isEdit ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': userData._token
+                },
+                body: JSON.stringify(apiData)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonColor: '#03A64A'
+                        }).then(() => {
+                            // Reload the page to show updated data
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: data.message,
+                            icon: 'error',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'An error occurred while processing your request',
+                        icon: 'error',
+                        confirmButtonColor: '#d33'
+                    });
+                });
+        });
+
+        // Search functionality is handled by admin-search.js utility
+
+        // View user modal open
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.open-user-view');
+            if (!btn) return;
+            const row = btn.closest('.user-row');
+            if (!row) return;
+            const name = row.getAttribute('data-user-name');
+            const email = row.getAttribute('data-user-email');
+            const phone = row.getAttribute('data-user-phone');
+            const role = row.getAttribute('data-user-role');
+            const status = row.getAttribute('data-user-status');
+
+            document.getElementById('uv-name').textContent = name || '';
+            document.getElementById('uv-email').textContent = email || '';
+            document.getElementById('uv-phone').textContent = phone || '';
+            document.getElementById('uv-role').textContent = role || '';
+            const statusEl = document.getElementById('uv-status');
+            statusEl.textContent = status || '';
+            statusEl.className = 'text-sm font-medium ' + ((status || '').toLowerCase() === 'active' ? 'text-green-700' : 'text-red-700');
+
+            userViewModal.classList.remove('hidden');
+            document.documentElement.style.overflow = 'hidden';
+        });
+
+        function closeUserView() {
+            userViewModal.classList.add('hidden');
+            document.documentElement.style.overflow = '';
+        }
+        document.getElementById('user-view-close').addEventListener('click', closeUserView);
+        document.getElementById('user-view-close-2').addEventListener('click', closeUserView);
+        userViewModal.addEventListener('click', function (e) { if (e.target === userViewModal) closeUserView(); });
+    });
+
+    // User action button handlers
+    document.addEventListener('click', function (e) {
+        // View user button
+        const viewBtn = e.target.closest('.view-user-btn');
+        if (viewBtn) {
+            const userId = viewBtn.getAttribute('data-user-id');
+            viewUser(userId);
+            return;
+        }
+
+        // Edit user button
+        const editBtn = e.target.closest('.edit-user-btn');
+        if (editBtn) {
+            const userId = editBtn.getAttribute('data-user-id');
+            editUser(userId);
+            return;
+        }
+
+        // Toggle status button
+        const toggleBtn = e.target.closest('.toggle-status-btn');
+        if (toggleBtn) {
+            const userId = toggleBtn.getAttribute('data-user-id');
+            const newStatus = toggleBtn.getAttribute('data-new-status');
+            toggleUserStatus(userId, newStatus);
+            return;
+        }
+
+        // Delete user button
+        const deleteBtn = e.target.closest('.delete-user-btn');
+        if (deleteBtn) {
+            const userId = deleteBtn.getAttribute('data-user-id');
+            deleteUser(userId);
+            return;
+        }
+    });
+
+    // Global functions for user actions
+    function viewUser(userId) {
+        // Find the user row and extract data
+        const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+        if (!row) return;
+
+        const name = row.getAttribute('data-user-name');
+        const email = row.getAttribute('data-user-email');
+        const phone = row.getAttribute('data-user-phone');
+        const role = row.getAttribute('data-user-role');
+        const status = row.getAttribute('data-user-status');
+
+        // Populate view modal
+        document.getElementById('uv-name').textContent = name || '';
+        document.getElementById('uv-email').textContent = email || '';
+        document.getElementById('uv-phone').textContent = phone || '';
+        document.getElementById('uv-role').textContent = role || '';
+        const statusEl = document.getElementById('uv-status');
+        statusEl.textContent = status || '';
+        statusEl.className = 'text-sm font-medium ' + ((status || '').toLowerCase() === 'active' ? 'text-green-700' : 'text-red-700');
+
+        // Show modal
+        const userViewModal = document.getElementById('user-view-modal');
+        userViewModal.classList.remove('hidden');
+        document.documentElement.style.overflow = 'hidden';
+    }
+
+    function editUser(userId) {
+        // Fetch user data and populate the form
+        fetch(`/admin/users/${userId}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const user = data.user;
+
+                    // Populate form fields
+                    document.getElementById('user-id').value = user.id;
+                    document.getElementById('first-name').value = user.firstName;
+                    document.getElementById('last-name').value = user.lastName;
+                    document.getElementById('email').value = user.email;
+                    document.getElementById('phone').value = user.phone || '';
+                    document.getElementById('role').value = user.roles.includes('ROLE_ADMIN') ? 'ROLE_ADMIN' : 'ROLE_USER';
+                    document.getElementById('is-active').checked = user.isActive;
+
+                    // Hide password field for editing
+                    document.getElementById('password-field').style.display = 'none';
+                    document.getElementById('password').required = false;
+
+                    // Show modal
+                    document.getElementById('user-modal').classList.remove('hidden');
+                    const mc = document.getElementById('user-modal-content');
+                    mc.classList.remove('modal-animate-in');
+                    void mc.offsetWidth; // reflow to restart animation
+                    mc.classList.add('modal-animate-in');
+                    document.getElementById('modal-title').textContent = 'Edit User';
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonColor: '#d33'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to load user data',
+                    icon: 'error',
+                    confirmButtonColor: '#d33'
+                });
+            });
+    }
+
+    function toggleUserStatus(userId, newStatus) {
+        const action = newStatus === 'true' ? 'activate' : 'deactivate';
+        const button = document.querySelector(`[data-user-id="${userId}"].toggle-status-btn`);
+        const userRole = button ? button.getAttribute('data-user-role') : 'User';
+        const isDeactivatingAdmin = action === 'deactivate' && userRole === 'Admin';
+
+        // If deactivating admin account, require password confirmation
+        if (isDeactivatingAdmin) {
+            Swal.fire({
+                title: 'Warning!',
+                text: 'You are about to deactivate an Admin account. Please enter your password to confirm.',
+                icon: 'warning',
+                input: 'password',
+                inputLabel: 'Admin Password',
+                inputPlaceholder: 'Enter your password',
+                inputAttributes: {
+                    autocapitalize: 'off',
+                    autocorrect: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonColor: '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Deactivate Admin',
+                cancelButtonText: 'Cancel',
+                preConfirm: (password) => {
+                    if (!password) {
+                        Swal.showValidationMessage('Password is required')
+                    }
+                    return password
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    performStatusUpdate(userId, newStatus, result.value);
+                }
+            });
+        } else {
+            // Regular confirmation for non-admin accounts
+            Swal.fire({
+                title: `Are you sure?`,
+                text: `This will ${action} the user account.`,
+                imageUrl: '/me/asking.png',
+                imageWidth: 80,
+                imageHeight: 80,
+                showCancelButton: true,
+                confirmButtonColor: '#03A64A',
+                cancelButtonColor: '#d33',
+                confirmButtonText: `Yes, ${action}!`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    performStatusUpdate(userId, newStatus, null);
+                }
+            });
+        }
+    }
+
+    function performStatusUpdate(userId, newStatus, password = null) {
+        const action = newStatus === 'true' ? 'activate' : 'deactivate';
+
+        // Show loading state
+        Swal.fire({
+            title: 'Updating...',
+            text: 'Please wait',
+            icon: 'info',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        const csrfToken = document.getElementById('csrf-token').value;
+        const requestBody = {
+            isActive: newStatus === 'true'
+        };
+
+        // Include password if provided (for admin deactivation)
+        if (password) {
+            requestBody.password = password;
+        }
+
+        fetch(`/admin/users/${userId}/toggle-status`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': csrfToken
+            },
+            body: JSON.stringify(requestBody)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Success!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonColor: '#03A64A'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonColor: '#d33'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'An error occurred while updating user status',
+                    icon: 'error',
+                    confirmButtonColor: '#d33'
+                });
+            });
+    }
+
+    function deleteUser(userId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            imageUrl: '/me/asking.png',
+            imageWidth: 80,
+            imageHeight: 80,
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Show loading state
+                Swal.fire({
+                    title: 'Deleting...',
+                    text: 'Please wait',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                fetch(`/admin/users/${userId}/delete`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: data.message,
+                                icon: 'success',
+                                confirmButtonColor: '#03A64A'
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: data.message,
+                                icon: 'error',
+                                confirmButtonColor: '#d33'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'An error occurred while deleting user',
+                            icon: 'error',
+                            confirmButtonColor: '#d33'
+                        });
+                    });
+            }
+        });
+    }
+</script>
+
+{% endblock %}

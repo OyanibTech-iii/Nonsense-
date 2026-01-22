@@ -1,0 +1,214 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="flex min-h-screen bg-background">
+	<!-- Mobile Menu Button -->
+	<button id="mobile-menu-button"
+		class="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white shadow-lg border border-gray-200 text-light-gray hover:text-dark-forest-green hover:bg-gray-50 transition-colors duration-200">
+		<ion-icon name="menu-outline" class="text-xl"></ion-icon>
+	</button>
+
+	<!-- Sidebar -->
+	<aside id="sidebar"
+		class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-200 flex flex-col shadow-sm transform lg:translate-x-0 transition-transform duration-300 ease-in-out">
+		<!-- Logo Section -->
+		<div class="flex items-center gap-3 px-6 py-5 border-b border-gray-200">
+			<div class="w-10 h-10 rounded-xl overflow-hidden shadow-sm ring-1 ring-gray-200">
+				<img src="{{ asset('logos/Icon- Brand.png') }}" alt="Growfico"
+					class="w-full h-full object-cover object-center" />
+			</div>
+			<div>
+				<h1 class="text-lg font-semibold text-dark-forest-green">Growfico</h1>
+				<p class="text-xs text-light-gray">User & Staff dashboard</p>
+			</div>
+		</div>
+
+		{% set links = [
+		{'label': 'Dashboard', 'route': path('app_user_page'), 'icon': 'grid-outline', 'route_name': 'app_user_page'},
+		{'label': 'Products', 'route': path('app_product_index'), 'icon': 'pricetags-outline', 'route_name':
+		'app_product_index'},
+		{'label': 'Create Product', 'route': path('app_product_new'), 'icon': 'add-circle-outline',
+		'route_name':
+		'app_product_new', 'indent': true, 'roles': ['ROLE_STAFF', 'ROLE_ADMIN']},
+
+		{'label': 'Stock', 'route': path('app_stock_index'), 'icon': 'cube-outline', 'route_name': 'app_stock_index'},
+		{'label': 'Profile', 'route': path('app_user_profile'), 'icon': 'person-outline', 'route_name': 'app_user_profile'},
+
+		]%}
+		{% include 'user_page/_sidebar_links.html.twig' with { links: links } %}
+
+		<!-- Sidebar Footer -->
+		<div class="px-6 py-4 border-t border-gray-100 text-xs text-light-gray">
+			<p>&copy; {{ "now"|date("Y") }} Growfico. All rights reserved.</p>
+		</div>
+	</aside>
+
+	<!-- Mobile Overlay -->
+	<div id="mobile-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden"></div>
+
+	<!-- Main Content Area -->
+	<div class="flex flex-col flex-1 min-w-0 lg:ml-72 pt-14 lg:pt-0">
+		<!-- Header -->
+		<header id="main-header" class="sticky top-0 z-30 bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
+			<div class="flex items-center justify-between">
+				<div>
+					<h2 class="text-xl font-semibold text-dark-forest-green">{% block page_title %}Dashboard{% endblock
+						%}</h2>
+					<p class="text-sm text-light-gray">{% block page_subtitle %}Personal workspace tailored to your
+						role.{% endblock %}</p>
+				</div>
+				<!-- User Profile Section -->
+				<div
+					class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors duration-200">
+					<div
+						class="w-10 h-10 bg-gradient-to-br from-bright-green to-primary-600 text-white flex items-center justify-center rounded-full font-semibold text-sm overflow-hidden">
+						{% if app.user.profileImage %}
+						<img src="{{ asset(app.user.profileImage) }}" alt="Profile"
+							class="w-full h-full object-cover" />
+						{% else %}
+						{{ app.user.firstName ? app.user.firstName|first|upper : app.user.email|first|upper }}
+						{% endif %}
+					</div>
+					<div class="flex-1 min-w-0">
+						<p class="text-sm font-medium text-dark-forest-green truncate">{{ app.user.getFullName() ??
+							'User' }}</p>
+						<p class="text-xs text-light-gray truncate">{{ app.user.email }}</p>
+					</div>
+					<button id="user-logout-btn" title="Logout"
+						class="p-1.5 rounded-lg hover:bg-gray-200 text-light-gray hover:text-dark-forest-green transition-colors duration-200"
+						aria-label="Logout">
+						<ion-icon name="log-out-outline" class="text-lg"></ion-icon>
+					</button>
+				</div>
+			</div>
+		</header>
+
+		<!-- Main Content -->
+		<main class="flex-1 p-6 overflow-y-auto">
+			{% block user_content %}{% endblock %}
+		</main>
+	</div>
+</div>
+
+<!-- Logout Confirmation Modal -->
+<div id="user-logout-modal" class="fixed inset-0 z-50 hidden backdrop-blur-md" style="display: none;">
+	<div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+	<div class="absolute inset-0 flex items-center justify-center">
+		<div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all relative z-10">
+			<div class="flex items-center gap-4 mb-4">
+				<div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+					<ion-icon name="alert-circle-outline" class="text-2xl text-red-600"></ion-icon>
+				</div>
+				<div>
+					<h3 class="text-lg font-semibold text-dark-forest-green">Confirm Logout</h3>
+					<p class="text-xs text-light-gray">Are you sure you want to logout?</p>
+				</div>
+			</div>
+			<p class="text-sm text-light-gray mb-6">You will be logged out of your account.</p>
+			<div class="flex gap-3">
+				<button id="user-logout-cancel"
+					class="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-dark-forest-green font-medium transition-colors duration-200">
+					Cancel
+				</button>
+				<a id="user-logout-confirm" href="{{ path('app_logout') }}"
+					class="flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition-colors duration-200 text-center no-underline flex items-center justify-center">
+					Logout
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	// Mobile menu toggle functionality
+	document.addEventListener('DOMContentLoaded', function () {
+		const mobileMenuButton = document.getElementById('mobile-menu-button');
+		const sidebar = document.getElementById('sidebar');
+		const mobileOverlay = document.getElementById('mobile-overlay');
+
+		function toggleSidebar() {
+			sidebar.classList.toggle('-translate-x-full');
+			mobileOverlay.classList.toggle('hidden');
+		}
+
+		function closeSidebar() {
+			sidebar.classList.add('-translate-x-full');
+			mobileOverlay.classList.add('hidden');
+		}
+
+		mobileMenuButton?.addEventListener('click', toggleSidebar);
+		mobileOverlay?.addEventListener('click', closeSidebar);
+
+		// Close sidebar when clicking on a link (mobile)
+		document.querySelectorAll('#sidebar a').forEach(link => {
+			link.addEventListener('click', function () {
+				if (window.innerWidth < 1024) {
+					closeSidebar();
+				}
+			});
+		});
+
+		document.addEventListener('click', function (event) {
+			if (window.innerWidth < 1024 &&
+				!sidebar.contains(event.target) &&
+				!mobileMenuButton.contains(event.target)) {
+				closeSidebar();
+			}
+		});
+
+		window.addEventListener('resize', function () {
+			if (window.innerWidth >= 1024) {
+				closeSidebar();
+			}
+		});
+	});
+
+	// Profile section scroll functionality
+	document.addEventListener('DOMContentLoaded', function () {
+		const profileLink = document.querySelector('a[data-action="profile"]');
+		const profileSection = document.getElementById('profile-section');
+
+		if (profileLink && profileSection) {
+			profileLink.addEventListener('click', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				profileSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				// Close mobile sidebar if open
+				const sidebar = document.getElementById('sidebar');
+				if (window.innerWidth < 1024) {
+					sidebar.classList.add('-translate-x-full');
+					document.getElementById('mobile-overlay').classList.add('hidden');
+				}
+			});
+		}
+	});
+
+	// Logout modal (consistent with admin)
+	const logoutBtn = document.getElementById('user-logout-btn');
+	const logoutModal = document.getElementById('user-logout-modal');
+	const logoutCancel = document.getElementById('user-logout-cancel');
+
+	logoutBtn?.addEventListener('click', function (e) {
+		e.preventDefault();
+		if (logoutModal) logoutModal.style.display = 'flex';
+	});
+
+	logoutCancel?.addEventListener('click', function () {
+		if (logoutModal) logoutModal.style.display = 'none';
+	});
+
+	logoutModal?.addEventListener('click', function (e) {
+		if (e.target === logoutModal) {
+			logoutModal.style.display = 'none';
+		}
+	});
+
+	document.addEventListener('keydown', function (e) {
+		if (e.key === 'Escape' && logoutModal && logoutModal.style.display !== 'none') {
+			logoutModal.style.display = 'none';
+		}
+	});
+</script>
+
+{% block extra_scripts %}{% endblock %}
+{% endblock %}

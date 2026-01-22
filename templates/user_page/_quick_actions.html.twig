@@ -1,0 +1,73 @@
+<div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm mb-8">
+	<div class="flex items-center justify-between mb-6">
+		<div>
+			<h3 class="text-lg font-semibold text-dark-forest-green">Quick Actions</h3>
+			<p class="text-sm text-light-gray">Shortcuts based on your role</p>
+		</div>
+	</div>
+	
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+		<a href="{{ path('app_product_index') }}" class="group bg-gradient-to-br from-bright-green/10 to-bright-green/5 rounded-xl p-4 border border-bright-green/20 hover:border-bright-green/40 transition-all duration-200">
+			<div class="flex items-center gap-3">
+				<div class="w-10 h-10 bg-forest-500 rounded-lg flex items-center justify-center">
+					<ion-icon name="pricetags-outline" class="text-xl text-white"></ion-icon>
+				</div>
+				<div>
+					<h4 class="font-semibold text-dark-forest-green group-hover:text-primary-600 transition-colors">View Products</h4>
+					<p class="text-xs text-light-gray">Catalog is read-only for users</p>
+				</div>
+			</div>
+		</a>
+
+		<a href="{{ path('app_stock_index') }}" class="group bg-gradient-to-br from-primary-100/50 to-primary-50 rounded-xl p-4 border border-primary-200 hover:border-primary-300 transition-all duration-200">
+			<div class="flex items-center gap-3">
+				<div class="w-10 h-10 bg-forest-500 rounded-lg flex items-center justify-center">
+					<ion-icon name="cube-outline" class="text-xl text-white"></ion-icon>
+				</div>
+				<div>
+					<h4 class="font-semibold text-dark-forest-green group-hover:text-primary-600 transition-colors">Check Stock</h4>
+					<p class="text-xs text-light-gray">View inventory levels</p>
+				</div>
+			</div>
+		</a>
+
+		{% if isStaff %}
+			<a href="{{ path('app_product_new') }}" class="group bg-gradient-to-br from-forest-100/50 to-forest-50 rounded-xl p-4 border border-forest-200 hover:border-forest-300 transition-all duration-200">
+				<div class="flex items-center gap-3">
+					<div class="w-10 h-10 bg-forest-500 rounded-lg flex items-center justify-center">
+						<ion-icon name="add-circle-outline" class="text-xl text-white"></ion-icon>
+					</div>
+					<div>
+						<h4 class="font-semibold text-dark-forest-green group-hover:text-primary-600 transition-colors">Create Product</h4>
+						<p class="text-xs text-light-gray">Staff only</p>
+					</div>
+				</div>
+			</a>
+
+			<a href="#password" class="group bg-gradient-to-br from-gray-100/50 to-gray-50 rounded-xl p-4 border border-gray-200 hover:border-gray-300 transition-all duration-200">
+				<div class="flex items-center gap-3">
+					<div class="w-10 h-10 bg-forest-500 rounded-lg flex items-center justify-center">
+						<ion-icon name="key-outline" class="text-xl text-white"></ion-icon>
+					</div>
+					<div>
+						<h4 class="font-semibold text-dark-forest-green group-hover:text-primary-600 transition-colors">Change Password</h4>
+						<p class="text-xs text-light-gray">For staff accounts</p>
+					</div>
+				</div>
+			</a>
+		{% else %}
+			<a href="#profile" class="group bg-gradient-to-br from-gray-100/50 to-gray-50 rounded-xl p-4 border border-gray-200 hover:border-gray-300 transition-all duration-200">
+				<div class="flex items-center gap-3">
+					<div class="w-10 h-10 bg-forest-500 rounded-lg flex items-center justify-center">
+						<ion-icon name="person-circle-outline" class="text-xl text-white"></ion-icon>
+					</div>
+					<div>
+						<h4 class="font-semibold text-dark-forest-green group-hover:text-primary-600 transition-colors">Update Profile</h4>
+						<p class="text-xs text-light-gray">Keep your details current</p>
+					</div>
+				</div>
+			</a>
+		{% endif %}
+	</div>
+</div>
+

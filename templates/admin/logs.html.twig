@@ -1,0 +1,309 @@
+{% extends 'admin/base_admin.html.twig' %}
+
+{% block title %}Activity Logs | Growfico{% endblock %}
+
+{% block header_title %}
+<h2 class="text-xl font-semibold text-dark-forest-green">Activity Logs</h2>
+<p class="text-sm text-light-gray">Admin-only view of recent actions and system activity</p>
+{% endblock %}
+
+{% block admin_content %}
+<div class="max-w-6xl mx-auto space-y-6">
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm p-4">
+        <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="text" name="user" placeholder="User/email" value="{{ filters.user }}"
+                class="border-gray-300 rounded-lg px-3 py-2 text-sm">
+            <select name="action" class="border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <option value="">All actions</option>
+                {% for value in
+                ['LOGIN','LOGOUT','CREATE_USER','UPDATE_USER','DELETE_USER','CREATE_PRODUCT','UPDATE_PRODUCT','DELETE_PRODUCT','CREATE_STOCK','UPDATE_STOCK','DELETE_STOCK']
+                %}
+                <option value="{{ value }}" {% if filters.action==value %}selected{% endif %}>{{ value }}</option>
+                {% endfor %}
+            </select>
+            <input type="date" name="from" value="{{ filters.from }}"
+                class="border-gray-300 rounded-lg px-3 py-2 text-sm">
+            <input type="date" name="to" value="{{ filters.to }}" class="border-gray-300 rounded-lg px-3 py-2 text-sm">
+            <div class="md:col-span-4 flex gap-3">
+                <button type="submit"
+                    class="px-4 py-2 bg-bright-green text-white rounded-lg text-sm hover:bg-green-600">Filter</button>
+                <a href="{{ path('app_admin_logs') }}"
+                    class="px-4 py-2 bg-gray-100 text-dark-forest-green rounded-lg text-sm hover:bg-gray-200">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">User ID</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timestamp</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Target</th>
+                    {# <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Details</th> #}
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for log in logs %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-4 py-3 text-sm text-gray-900">{{ log.userId }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">{{ log.createdAt|date('Y-m-d H:i:s') }}</td>
+                    <td class="px-4 py-3 text-sm text-gray-900">{{ log.username }}</td>
+                    <td class="px-4 py-3 text-sm 
+                        {% if log.role == 'ROLE_ADMIN' %}
+                            font-semibold
+                            text-dark-forest-green
+                        {% elseif log.role == 'ROLE_STAFF' %}
+                            text-orange-600
+                        {% else %}
+                            text-blue-600
+                        {% endif %}">
+                        {{ log.role }}
+                    </td>
+                    <td class="px-4 py-3 text-sm font-semibold
+                        {% if log.action == 'LOGOUT' %}
+                            text-red-600
+                        {% elseif log.action == 'LOGIN' %}
+                            text-bright-green
+                        {% else %}
+                            text-dark-forest-green
+                        {% endif %}">
+                        {{ log.action }}
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-700 break-words">{{ log.target }}</td>
+
+                    {# <td class="px-4 py-3 text-sm text-gray-700 break-words">
+                        {% if log.changes is defined and log.changes %}
+                            <ul class="text-sm space-y-1"> #}
+                                {# {% for field, change in log.changes %}
+                                    <li>
+                                        <span class="font-medium">{{ field }}</span>:
+                                        {% if change.from is defined %}{{ change.from }}{% else %}—{% endif %}
+                                        <span class="mx-2">→</span>
+                                        {% if change.to is defined %}
+                                            {% if field in ['profileImage','avatar','profileImageUrl'] %}
+                                                <span class="text-sm text-gray-700">(image)</span>
+                                            {% else %}
+                                                {{ change.to }}
+                                            {% endif %}
+                                        {% else %}
+                                            —
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            {% if log.changes.profileImage is defined and log.changes.profileImage.to %}
+                                <img src="{{ log.changes.profileImage.to }}" alt="Profile Image"
+                                    class="w-12 h-12 rounded-full mt-2 object-cover">
+                            {% elseif log.changes.profileImageUrl is defined and log.changes.profileImageUrl.to %}
+                                <img src="{{ log.changes.profileImageUrl.to }}" alt="Profile Image"
+                                    class="w-12 h-12 rounded-full mt-2 object-cover">
+                            {% endif %}
+                        {% else %}
+                            {{ log.target }}
+                        {% endif %}
+                    </td> #}
+
+                    <td class="px-4 py-3 text-sm">
+                        <button type="button"
+                            class="text-bright-green hover:text-green-600 transition-colors duration-200 view-log-details"
+                            data-log-id="{{ log.id }}" data-log-timestamp="{{ log.createdAt|date('Y-m-d H:i:s') }}"
+                            data-log-userid="{{ log.userId }}" data-log-username="{{ log.username }}"
+                            data-log-role="{{ log.role }}" data-log-action="{{ log.action }}"
+                            data-log-target="{{ log.target }}"
+                            data-log-ip="{{ log.ip|default('') }}"
+                            data-log-changes='{{ log.changes|json_encode|e('html_attr') }}'
+                            title="View Details">
+                            <ion-icon name="eye-outline" class="w-4 h-4"></ion-icon>
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" class="px-4 py-6 text-center text-sm text-gray-500">No logs found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Log Details Modal -->
+<div id="log-details-modal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+    <div class="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full overflow-hidden">
+            <div class="px-6 py-4 bg-bright-green text-white flex items-center justify-between">
+                <h3 class="text-lg font-semibold">Activity Log Details</h3>
+                <button id="log-modal-close" class="text-white/90 hover:text-white">
+                    <ion-icon name="close-outline" class="w-6 h-6"></ion-icon>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-xs text-light-gray uppercase font-medium mb-1">Timestamp</p>
+                        <p id="ld-timestamp" class="text-sm font-semibold text-dark-forest-green"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-light-gray uppercase font-medium mb-1">User ID</p>
+                        <p id="ld-userid" class="text-sm font-semibold text-dark-forest-green"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-light-gray uppercase font-medium mb-1">Username</p>
+                        <p id="ld-username" class="text-sm font-semibold text-dark-forest-green"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-light-gray uppercase font-medium mb-1">Role</p>
+                        <p id="ld-role" class="text-sm">
+                            <span class="px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-700"></span>
+                        </p>
+                    </div>
+                </div>
+                <div class="border-t border-gray-200 pt-4">
+                    <div>
+                        <p class="text-xs text-light-gray uppercase font-medium mb-2">Action</p>
+                        <p id="ld-action" class="text-sm font-semibold text-dark-forest-green mb-4"></p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-light-gray uppercase font-medium mb-2">Target Details</p>
+                        <p id="ld-target" class="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg break-words"></p>
+                    </div>
+
+                    <div class="pt-4">
+                        <p class="text-xs text-light-gray uppercase font-medium mb-2">Changes On Profile</p>
+                        <div id="ld-changes" class="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg overflow-auto"></div>
+                        <div id="ld-profile-images-wrap" class="mt-3 flex gap-6 items-start">
+                            <div id="ld-old-image-wrap" class="hidden">
+                                <p class="text-xs text-light-gray uppercase font-medium mb-1">Old Image</p>
+                                <img id="ld-profile-image-old" src="" alt="Old Profile Image" class="w-8 h-8 rounded-full object-cover border border-gray-300">
+                            </div>
+                            <div id="ld-new-image-wrap" class="hidden">
+                                <p class="text-xs text-light-gray uppercase font-medium mb-1">New Image</p>
+                                <img id="ld-profile-image-new" src="" alt="New Profile Image" class="w-8 h-8 rounded-full object-cover border border-gray-300">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {# <div class="flex justify-end pt-4 border-t border-gray-100">
+                    <button id="log-modal-close-2"
+                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200">Close</button>
+                </div> #}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Log details modal logic
+    (function () {
+        const modal = document.getElementById('log-details-modal');
+        const closeButtons = [
+            document.getElementById('log-modal-close'),
+            document.getElementById('log-modal-close-2')
+        ];
+
+        function openModal(button) {
+            const timestamp = button.getAttribute('data-log-timestamp');
+            const userId = button.getAttribute('data-log-userid');
+            const username = button.getAttribute('data-log-username');
+            const role = button.getAttribute('data-log-role');
+            const action = button.getAttribute('data-log-action');
+            const target = button.getAttribute('data-log-target');
+            const ip = button.getAttribute('data-log-ip');
+            const changesJson = button.getAttribute('data-log-changes');
+
+            document.getElementById('ld-timestamp').textContent = timestamp || '';
+            document.getElementById('ld-userid').textContent = userId || 'N/A';
+            document.getElementById('ld-username').textContent = username || '';
+            document.getElementById('ld-action').textContent = action || '';
+            document.getElementById('ld-target').textContent = target || '';
+
+            const roleSpan = document.querySelector('#ld-role span');
+            roleSpan.textContent = role || '';
+
+            // Parse and render changes
+            const changesDiv = document.getElementById('ld-changes');
+            const oldImageImg = document.getElementById('ld-profile-image-old');
+            const newImageImg = document.getElementById('ld-profile-image-new');
+            const oldImageWrap = document.getElementById('ld-old-image-wrap');
+            const newImageWrap = document.getElementById('ld-new-image-wrap');
+
+            if (changesJson) {
+                try {
+                    const changes = JSON.parse(changesJson);
+                    if (Object.keys(changes).length > 0) {
+                        let changesHTML = '<ul class="space-y-2">';
+                        for (const [field, change] of Object.entries(changes)) {
+                            const from = change.from !== undefined && change.from !== null ? change.from : '—';
+                            const to = change.to !== undefined && change.to !== null ? change.to : '—';
+                            
+                            if (['profileImage', 'avatar', 'profileImageUrl'].includes(field)) {
+                                changesHTML += `<li><span class="font-medium">${field}</span>: (image updated)</li>`;
+                                // Show old and new images
+                                if (change.from && change.from !== 'none' && (field === 'profileImage' || field === 'profileImageUrl')) {
+                                    oldImageImg.src = change.from;
+                                    oldImageImg.onerror = function() {
+                                        this.src = '/me/asking.png';
+                                    };
+                                    oldImageWrap.classList.remove('hidden');
+                                } else {
+                                    // Show fallback when no old image
+                                    oldImageImg.src = '/me/asking.png';
+                                    oldImageWrap.classList.remove('hidden');
+                                }
+                                if (change.to && (field === 'profileImage' || field === 'profileImageUrl')) {
+                                    newImageImg.src = change.to;
+                                    newImageImg.onerror = function() {
+                                        this.src = '/me/asking.png';
+                                    };
+                                    newImageWrap.classList.remove('hidden');
+                                }
+                            } else {
+                                changesHTML += `<li><span class="font-medium">${field}</span>: <span class="text-gray-600">${from}</span> <span class="mx-1">→</span> <span class="text-green-600">${to}</span></li>`;
+                            }
+                        }
+                        changesHTML += '</ul>';
+                        changesDiv.innerHTML = changesHTML;
+                    } else {
+                        changesDiv.innerHTML = '<p class="text-gray-500">No changes recorded</p>';
+                        oldImageWrap.classList.add('hidden');
+                        newImageWrap.classList.add('hidden');
+                    }
+                } catch (e) {
+                    changesDiv.textContent = changesJson || 'No changes data';
+                    oldImageWrap.classList.add('hidden');
+                    newImageWrap.classList.add('hidden');
+                }
+            } else {
+                changesDiv.innerHTML = '<p class="text-gray-500">No changes recorded</p>';
+                oldImageWrap.classList.add('hidden');
+                newImageWrap.classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+            document.documentElement.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            document.documentElement.style.overflow = '';
+        }
+
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('.view-log-details');
+            if (btn) openModal(btn);
+        });
+
+        closeButtons.forEach(btn => btn && btn.addEventListener('click', closeModal));
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
+        });
+    })();
+</script>
+
+{% endblock %}

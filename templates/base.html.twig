@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+
+	<title>
+		{% block title %}Growfico | Cultivating Green Future
+		{% endblock %}
+	</title>
+	<link rel="icon" href="{{asset('favicon.ico')}}">
+	{% block stylesheets %}
+	{{ encore_entry_link_tags('app') }}
+	{% endblock %}
+
+	{% block javascripts %}
+	{{ encore_entry_script_tags('app') }}
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.46.0/dist/apexcharts.min.js"></script>
+
+	<!-- Admin Search Utility -->
+	<script src="{{ asset('js/admin-search.js') }}"></script>
+
+	<!-- Ionicons CDN - Improved loading with better error handling -->
+	<script type="module" data-turbo-track="reload"
+		src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js?v={{ " now"|date(" u") }}"></script>
+	<script nomodule data-turbo-track="reload" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js?v={{ "
+		now"|date(" u") }}"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script>
+		// Suppress WebSocket connection errors
+		window.addEventListener('error', function (e) {
+			if (e.message && e.message.includes('WebSocket connection')) {
+				e.preventDefault();
+				return false;
+			}
+		});
+
+		// Handle null reference errors in AJAX requests
+		window.addEventListener('unhandledrejection', function (e) {
+			if (e.reason && e.reason.message && e.reason.message.includes('Cannot read properties of null')) {
+				e.preventDefault();
+				return false;
+			}
+		});
+	</script>
+
+	<!-- Logout Confirmation Function -->
+	<script>
+		function confirmLogout(event) {
+			event.preventDefault();
+
+			Swal.fire({
+				title: 'Logout Confirmation',
+				html: `
+						<div class="text-center">
+							<div class="mb-4 flex justify-center items-center">
+								<img src="{{ asset('me/asking.png') }}" alt="Logout confirmation" style="width: 8rem; display: block; margin: 0 auto;">
+							</div>
+							<p class="text-gray-600">Are you sure you want to logout?</p>
+							<p class="text-sm text-gray-500">You will need to login again to access your account.</p>
+						</div>
+					`,
+				showCancelButton: true,
+				confirmButtonColor: '#03A64A',
+				cancelButtonColor: '#6A7F74',
+				confirmButtonText: '<ion-icon name="checkmark-outline" style="margin-right: 0.5rem;"></ion-icon>Yes, logout',
+				cancelButtonText: '<ion-icon name="close-outline" style="margin-right: 0.5rem;"></ion-icon>Cancel',
+				reverseButtons: true,
+				focusCancel: true,
+				allowOutsideClick: false,
+				allowEscapeKey: true,
+				showClass: {
+					popup: 'animate__animated animate__fadeInDown'
+				},
+				hideClass: {
+					popup: 'animate__animated animate__fadeOutUp'
+				}
+			}).then((result) => {
+				if (result.isConfirmed) { // Show loading state
+					Swal.fire({
+						background: '#ffffff',
+						backdrop: 'rgba(3, 166, 74, 0.06)',
+						showConfirmButton: false,
+						allowOutsideClick: false,
+						allowEscapeKey: false,
+						html: `
+                            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:6px 2px;">
+                                <div style="display:flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:9999px;background:linear-gradient(135deg, rgba(3,166,74,0.12), rgba(3,166,74,0.04));">
+                                    <svg width="40" height="40" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                                        <circle cx="28" cy="28" r="22" stroke="#E6F6EE" stroke-width="6" fill="none"/>
+                                        <path d="M50 28a22 22 0 0 0-22-22" stroke="#03A64A" stroke-width="6" stroke-linecap="round" fill="none">
+                                            <animateTransform attributeName="transform" type="rotate" from="0 28 28" to="360 28 28" dur="0.9s" repeatCount="indefinite"/>
+                                        </path>
+                                    </svg>
+                                </div>
+                                <div style="text-align:center;">
+                                    <div style="font-weight:700;color:#0E4F32;letter-spacing:0.2px;">Logging you out…</div>
+                                    <div style="font-size:12px;color:#6A7F74;margin-top:2px;">Please wait a moment</div>
+                                </div>
+                            </div>
+                        `
+					});
+
+					// Redirect after a short delay
+					setTimeout(() => {
+						window.location.href = '/logout';
+					}, 1500);
+				}
+			});
+		}
+	</script>
+	{% endblock %}
+</head>
+
+<body>
+	{% block body %}{% endblock %}
+
+	<!-- Global Confirm Modal (re-usable across all pages) -->
+	<div id="confirm-modal" class="fixed inset-0 z-50 hidden" style="display: none;">
+	    <div class="absolute inset-0 bg-black/40 backdrop-blur-md"></div>
+	    <div class="absolute inset-0 flex items-center justify-center">
+	        <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-md w-full mx-4 transform transition-all relative z-10">
+	            <div class="flex items-center gap-4 mb-3">
+	                <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center">
+	                    <ion-icon name="alert-circle-outline" class="text-2xl text-yellow-600"></ion-icon>
+	                </div>
+	                <div>
+	                    <h3 id="confirm-modal-title" class="text-lg font-semibold text-dark-forest-green">Are you sure?</h3>
+	                    <p id="confirm-modal-sub" class="text-xs text-light-gray">This action cannot be undone.</p>
+	                </div>
+	            </div>
+
+	            <p id="confirm-modal-message" class="text-sm text-light-gray mb-6">Please confirm this action.</p>
+
+	            <div class="flex gap-3">
+	                <button id="confirm-cancel-btn" class="flex-1 px-4 py-2.5 rounded-lg bg-gray-100 hover:bg-gray-200 text-dark-forest-green font-medium transition-colors duration-200">
+	                    Cancel
+	                </button>
+	                <button id="confirm-ok-btn" class="flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition-colors duration-200">
+	                    Confirm
+	                </button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<script>
+	    // Reusable confirm modal utility
+	    (function(){
+	        const modal = document.getElementById('confirm-modal');
+	        const msgEl = document.getElementById('confirm-modal-message');
+	        const titleEl = document.getElementById('confirm-modal-title');
+	        const subEl = document.getElementById('confirm-modal-sub');
+	        const okBtn = document.getElementById('confirm-ok-btn');
+	        const cancelBtn = document.getElementById('confirm-cancel-btn');
+
+	        let resolveFn = null;
+
+	        function openConfirm(options){
+	            options = options || {};
+	            titleEl.textContent = options.title || 'Are you sure?';
+	            subEl.textContent = options.subtitle || '';
+	            msgEl.textContent = options.message || 'This action cannot be undone.';
+	            okBtn.textContent = options.confirmText || 'Confirm';
+	            if (options.confirmClass) {
+	                okBtn.className = 'flex-1 px-4 py-2.5 rounded-lg ' + options.confirmClass + ' hover:opacity-95 text-white font-medium transition-colors duration-200';
+	            } else {
+	                okBtn.className = 'flex-1 px-4 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-medium transition-colors duration-200';
+	            }
+
+	            modal.style.display = 'flex';
+	            modal.classList.remove('hidden');
+	            document.documentElement.style.overflow = 'hidden';
+
+	            return new Promise((resolve) => { resolveFn = resolve; });
+	        }
+
+	        function closeConfirm() {
+	            modal.style.display = 'none';
+	            modal.classList.add('hidden');
+	            document.documentElement.style.overflow = '';
+	            resolveFn = null;
+	        }
+
+	        okBtn.addEventListener('click', function(){
+	            if (resolveFn) resolveFn(true);
+	            closeConfirm();
+	        });
+
+	        cancelBtn.addEventListener('click', function(){
+	            if (resolveFn) resolveFn(false);
+	            closeConfirm();
+	        });
+
+	        modal.addEventListener('click', function(e){
+	            if (e.target === modal) { if (resolveFn) resolveFn(false); closeConfirm(); }
+	        });
+
+	        document.addEventListener('keydown', function(e){
+	            if (e.key === 'Escape' && modal.style.display !== 'none') { if (resolveFn) resolveFn(false); closeConfirm(); }
+	        });
+
+	        // Expose globally
+	        window.showConfirmModal = openConfirm;
+	    })();
+
+	    // Intercept native form submits for forms marked `.confirm-delete-form` globally
+	    document.addEventListener('submit', function(e){
+	        const form = e.target;
+	        if (!form || !form.classList || !form.classList.contains('confirm-delete-form')) return;
+	        e.preventDefault();
+	        const msg = form.getAttribute('data-message') || 'Are you sure you want to perform this action?';
+	        window.showConfirmModal({ title: 'Confirm Action', message: msg, confirmText: 'Delete', confirmClass: 'bg-red-600 hover:bg-red-700' })
+	            .then(function(confirmed){ if (confirmed) form.submit(); });
+	    });
+	</script>
+	
+</body>
+
+</html>

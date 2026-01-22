@@ -1,0 +1,104 @@
+{% extends 'user_page/base_user.html.twig' %}
+
+{% block title %}Profile | Growfico{% endblock %}
+{% block page_title %}Profile{% endblock %}
+{% block page_subtitle %}Manage your account settings and personal information{% endblock %}
+
+{% block user_content %}
+	<div class="max-w-7xl mx-auto">
+		{% include 'user_page/_profile_forms.html.twig' with { isStaff: isStaff } %}
+	</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	const uploadBtn = document.getElementById('upload-photo-btn');
+	const fileInput = document.getElementById('profile-image-input');
+	const preview = document.getElementById('profile-preview');
+	const initials = document.getElementById('profile-initials');
+	const profileForm = document.getElementById('profile-form');
+	const profileStatus = document.getElementById('profile-status');
+	const passwordForm = document.getElementById('password-form');
+	const passwordStatus = document.getElementById('password-status');
+
+	uploadBtn?.addEventListener('click', () => fileInput?.click());
+
+	fileInput?.addEventListener('change', function(e) {
+		const file = e.target.files[0];
+		if (!file) return;
+		const reader = new FileReader();
+		reader.onload = function(event) {
+			if (preview) {
+				preview.src = event.target.result;
+			} else if (initials) {
+				const img = document.createElement('img');
+				img.id = 'profile-preview';
+				img.src = event.target.result;
+				img.className = 'w-full h-full object-cover';
+				initials.replaceWith(img);
+			}
+		};
+		reader.readAsDataURL(file);
+	});
+
+	profileForm?.addEventListener('submit', async function(e) {
+		e.preventDefault();
+		const formData = new FormData(profileForm);
+		profileStatus.textContent = 'Saving...';
+
+		try {
+			const response = await fetch(profileForm.action, {
+				method: 'POST',
+				body: formData,
+				headers: { 'X-Requested-With': 'XMLHttpRequest' }
+			});
+			const data = await response.json();
+			profileStatus.textContent = data.message || (data.success ? 'Profile updated' : 'Unable to update profile');
+			profileStatus.classList.toggle('text-bright-green', !!data.success);
+			profileStatus.classList.toggle('text-red-600', !data.success);
+		} catch (error) {
+			console.error(error);
+			profileStatus.textContent = 'Something went wrong while saving.';
+			profileStatus.classList.remove('text-bright-green');
+			profileStatus.classList.add('text-red-600');
+		}
+	});
+
+	passwordForm?.addEventListener('submit', async function(e) {
+		e.preventDefault();
+		const formData = new FormData(passwordForm);
+		passwordStatus.textContent = 'Updating...';
+
+		try {
+			const response = await fetch(passwordForm.action, {
+				method: 'POST',
+				body: formData,
+				headers: { 'X-Requested-With': 'XMLHttpRequest' }
+			});
+			const data = await response.json();
+			passwordStatus.textContent = data.message || (data.success ? 'Password updated' : 'Unable to update password');
+			passwordStatus.classList.toggle('text-bright-green', !!data.success);
+			passwordStatus.classList.toggle('text-red-600', !data.success);
+			if (data.success) {
+				passwordForm.reset();
+			}
+		} catch (error) {
+			console.error(error);
+			passwordStatus.textContent = 'Something went wrong while updating password.';
+			passwordStatus.classList.remove('text-bright-green');
+			passwordStatus.classList.add('text-red-600');
+		}
+	});
+});
+</script>
+
+<style>
+.line-clamp-2 {
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+</style>
+{% endblock %}
